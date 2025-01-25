@@ -3,8 +3,8 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class ChessController {
-    private ChessModel model;
-    private ChessView view;
+    private final ChessModel model;
+    private final ChessView view;
 
     public ChessController(ChessModel model, ChessView view) {
         this.model = model;
