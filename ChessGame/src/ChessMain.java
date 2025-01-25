@@ -13,10 +13,10 @@ public class ChessMain {
 
         controller.updateView();
         controller.inputCoordinates(scanner);
-        controller.swapFiguresOnBoard(model.board, boardPositions);
+        controller.swapFiguresOnBoard(model.board,boardPositions);
         controller.updateView();
         controller.inputCoordinates(scanner);
-        controller.swapFiguresOnBoard(model.board, boardPositions);
+        controller.swapFiguresOnBoard(model.board,boardPositions);
         controller.updateView();
     }
 }

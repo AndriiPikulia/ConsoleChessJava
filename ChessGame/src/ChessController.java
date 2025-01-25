@@ -71,9 +71,9 @@ public class ChessController {
             }
         }
 
-        char temp = board[presentLetterKeyToNumber][presentNumberCoordinate];
-        board[presentLetterKeyToNumber][presentNumberCoordinate] = board[nextLetterKeyToNumber][nextNumberCoordinate];
-        board[nextLetterKeyToNumber][nextNumberCoordinate] = temp;
+        char temp = board[presentNumberCoordinate][presentLetterKeyToNumber];
+        board[presentNumberCoordinate][presentLetterKeyToNumber] = board[nextNumberCoordinate][nextLetterKeyToNumber];
+        board[nextNumberCoordinate][nextLetterKeyToNumber] = temp;
         return board;
     }
 
