@@ -1,5 +1,3 @@
-import java.util.HashMap;
-
 public class ChessModel {
     String presentCellCoordinates;
     String nextCellCoordinates;
@@ -27,7 +25,5 @@ public class ChessModel {
             {'.','.','.','.','.','.','.','.'},
             {'.','.','.','.','.','.','.','.'},
             {'P','P','P','P','P','P','P','P'},
-            {'R','N','B','Q','K','B','N','R'}};;
-
-    HashMap<Character, Integer> boardFields = new HashMap<>();
+            {'R','N','B','Q','K','B','N','R'}};
 }

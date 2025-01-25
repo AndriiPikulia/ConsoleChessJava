@@ -1,5 +1,3 @@
-import java.util.HashMap;
-
 public class ChessView {
     public void printBoard(char[][] board) {
         for (int i = 0; i <8; i++) {
