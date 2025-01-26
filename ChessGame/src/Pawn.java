@@ -11,7 +11,7 @@ public class Pawn {
     boolean isPossibleMovePawn = (presentX == nextX && yLength == 1 && nextY < presentY && board[nextY][nextX] == '.');
 
     if(isPossibleMovePawn){
-        board[nextX][nextX] = board[presentY][presentX];
+        board[nextY][nextX] = board[presentY][presentX];
         board[presentY][presentX] = '.';
     }
 }
