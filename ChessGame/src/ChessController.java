@@ -70,6 +70,12 @@ public class ChessController {
             return board;
         }
 
+        if (Character.toLowerCase(board[presentNumberCoordinate][nextLetterKeyToNumber]) == 'p') {
+            model.pawn.movePawn(presentLetterKeyToNumber, presentNumberCoordinate, nextLetterKeyToNumber, nextNumberCoordinate);
+            return board;
+        }
+
+
         char temp = board[presentNumberCoordinate][presentLetterKeyToNumber];
         board[presentNumberCoordinate][presentLetterKeyToNumber] = board[nextNumberCoordinate][nextLetterKeyToNumber];
         board[nextNumberCoordinate][nextLetterKeyToNumber] = temp;
