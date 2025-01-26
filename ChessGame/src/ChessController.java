@@ -71,7 +71,7 @@ public class ChessController {
             }
         }
 
-        if (board[presentNumberCoordinate][presentLetterKeyToNumber] == Character.toLowerCase('n')) {
+        if (Character.toLowerCase(board[presentNumberCoordinate][presentLetterKeyToNumber]) == 'n') {
             model.knight.move(presentLetterKeyToNumber, presentNumberCoordinate, nextLetterKeyToNumber, nextNumberCoordinate);
             return board;
         }
