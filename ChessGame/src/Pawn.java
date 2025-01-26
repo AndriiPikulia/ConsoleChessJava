@@ -1,4 +1,4 @@
-public class Pawn {
+public class Pawn extends Figure {
     private final char[][] board;
 
     public Pawn(char[][] board) {
