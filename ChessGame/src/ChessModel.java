@@ -1,6 +1,11 @@
 public class ChessModel {
     String presentCellCoordinates;
     String nextCellCoordinates;
+    Knight knight;
+
+    public ChessModel() {
+        this.knight = new Knight(board);
+    }
 
     public String getPresentCellCoordinates() {
         return presentCellCoordinates;

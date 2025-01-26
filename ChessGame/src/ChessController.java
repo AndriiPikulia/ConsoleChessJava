@@ -37,28 +37,22 @@ public class ChessController {
         model.setNextCellCoordinates(nextCellCoordinates);
     }
 
-    public char getPresentLetterCoordinate(String presentCellCoordinates) {
+    public char getLetterCoordinate(String presentCellCoordinates) {
         return presentCellCoordinates.charAt(0);
     }
-    public int getPresentNumberCoordinate(String presentCellCoordinates) {
+    public int getNumberCoordinate(String presentCellCoordinates) {
         return Integer.parseInt(presentCellCoordinates.substring(1));
-    }
-    public char getNextLetterCoordinate(String nextCellCoordinates) {
-        return nextCellCoordinates.charAt(0);
-    }
-    public int getNextNumberCoordinate(String nextCellCoordinates) {
-        return Integer.parseInt(nextCellCoordinates.substring(1));
     }
 
     public char[][] swapFiguresOnBoard(char[][] board, HashMap<Character, Integer> boardPositions) {
         int nextLetterKeyToNumber = 0;
         int presentLetterKeyToNumber = 0;
 
-        char presentLetterCoordinate = getPresentLetterCoordinate(model.getPresentCellCoordinates());
-        int presentNumberCoordinate = (getPresentNumberCoordinate(model.getPresentCellCoordinates()))-1;
+        char presentLetterCoordinate = getLetterCoordinate(model.getPresentCellCoordinates());
+        int presentNumberCoordinate = (getNumberCoordinate(model.getPresentCellCoordinates()))-1;
 
-        char nextLetterCoordinate = getNextLetterCoordinate(model.getNextCellCoordinates());
-        int nextNumberCoordinate = (getNextNumberCoordinate(model.getNextCellCoordinates()))-1;
+        char nextLetterCoordinate = getLetterCoordinate(model.getNextCellCoordinates());
+        int nextNumberCoordinate = (getNumberCoordinate(model.getNextCellCoordinates()))-1;
 
         for(Map.Entry<Character, Integer> entry : boardPositions.entrySet()) {
             if(entry.getKey() == presentLetterCoordinate) {
@@ -69,6 +63,11 @@ public class ChessController {
             if(entry.getKey() == nextLetterCoordinate) {
                 nextLetterKeyToNumber = entry.getValue()-1;
             }
+        }
+
+        if (Character.toLowerCase(board[presentNumberCoordinate][presentLetterKeyToNumber]) == 'n') {
+            model.knight.move(presentLetterKeyToNumber, presentNumberCoordinate, nextLetterKeyToNumber, nextNumberCoordinate);
+            return board;
         }
 
         char temp = board[presentNumberCoordinate][presentLetterKeyToNumber];
