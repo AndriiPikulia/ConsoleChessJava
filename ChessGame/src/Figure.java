@@ -3,45 +3,22 @@ abstract public class Figure {
 
     abstract protected void move(int presentX, int presentY, int nextX, int nextY);
 
-    protected boolean checkIsFigureInLine(int presentX, int presentY, int nextX, int nextY) {
-        return presentX == nextX ? checkIsFigureInVerticalLine(presentY, nextY, presentX)
-                : checkIsFigureInHorizontalLine(presentX, nextX, presentY);
-    }
+    protected boolean checkIsFigureInLine(int startX, int startY, int endX, int endY) {
+        int indexIAddition = endX - startX > 0 ? 1 : -1;
+        int indexJAddition = endY - startY > 0 ? 1 : -1;
+        int i = startX;
+        int j = startY;
 
-    protected boolean checkIsFigureInHorizontalLine(int startX, int endX, int constantY) {
-        if (endX - startX > 0) {
-            for (int i = startX + 1; i < endX; i++) {
-                if (board[constantY][i] != '.') {
-                    return true;
-                }
+        while (true) {
+            i += i == endX ? 0 : indexIAddition;
+            j += j == endY ? 0 : indexJAddition;
+
+            if (i == endX && j == endY) {
+                break;
             }
-        }
 
-        if (endX - startX < 0) {
-            for (int i = startX - 1; i > endX; i--) {
-                if (board[constantY][i] != '.') {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    protected boolean checkIsFigureInVerticalLine(int startY, int endY, int constantX) {
-        if (endY - startY > 0) {
-            for (int i = startY + 1; i < endY; i++) {
-                if (board[i][constantX] != '.') {
-                    return true;
-                }
-            }
-        }
-
-        if (endY - startY < 0) {
-            for (int i = startY - 1; i > endY; i--) {
-                if (board[i][constantX] != '.') {
-                    return true;
-                }
+            if (board[j][i] != '.') {
+                return true;
             }
         }
 
