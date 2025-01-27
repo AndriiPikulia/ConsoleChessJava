@@ -65,27 +65,20 @@ public class ChessController {
             }
         }
 
-        if (Character.toLowerCase(board[presentNumberCoordinate][presentLetterKeyToNumber]) == 'n') {
-            model.knight.move(presentLetterKeyToNumber, presentNumberCoordinate, nextLetterKeyToNumber, nextNumberCoordinate);
-            return board;
-        }
+        char figureSymbol = board[presentNumberCoordinate][presentLetterKeyToNumber];
+        moveFigure(figureSymbol, presentLetterKeyToNumber, presentNumberCoordinate, nextLetterKeyToNumber, nextNumberCoordinate);
 
-        if (Character.toLowerCase(board[presentNumberCoordinate][presentLetterKeyToNumber]) == 'p') {
-            model.pawn.move(presentLetterKeyToNumber, presentNumberCoordinate, nextLetterKeyToNumber, nextNumberCoordinate);
-            return board;
-        }
-
-        if (Character.toLowerCase(board[presentNumberCoordinate][presentLetterKeyToNumber]) == 'r') {
-            model.rook.move(presentLetterKeyToNumber, presentNumberCoordinate, nextLetterKeyToNumber, nextNumberCoordinate);
-            return board;
-        }
-
-
-
-        char temp = board[presentNumberCoordinate][presentLetterKeyToNumber];
-        board[presentNumberCoordinate][presentLetterKeyToNumber] = board[nextNumberCoordinate][nextLetterKeyToNumber];
-        board[nextNumberCoordinate][nextLetterKeyToNumber] = temp;
         return board;
     }
 
+    public void moveFigure(char figureSymbol, int presentX, int presentY, int nextX, int nextY) {
+        char figureSymbolLowerCase = Character.toLowerCase(figureSymbol);
+        Figure figure = model.figures.get(figureSymbolLowerCase);
+
+        if (figure == null) {
+            return;
+        }
+
+        figure.move(presentX, presentY, nextX, nextY);
+    }
 }

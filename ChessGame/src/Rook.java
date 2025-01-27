@@ -5,6 +5,7 @@ public class Rook extends Figure {
         this.board = board;
     }
 
+    @Override
     protected void move(int presentX, int presentY, int nextX, int nextY) {
         int xDifference = presentX - nextX;
         int yDifference = presentY - nextY;
