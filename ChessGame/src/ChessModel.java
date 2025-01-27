@@ -8,21 +8,23 @@ public class ChessModel {
     Pawn pawn;
     Rook rook;
     Bishop bishop;
-
+    Queen queen;
 
     public ChessModel() {
+        this.figures = new HashMap<>();
+
         this.knight = new Knight(board);
         this.pawn = new Pawn(board);
         this.rook = new Rook(board);
         this.figures = new HashMap<>();
         this.bishop = new Bishop(board);
-
+        this.queen = new Queen(board);
 
         figures.put('n', knight);
         figures.put('p', pawn);
         figures.put('r', rook);
         figures.put('b', bishop);
-
+        figures.put('q', queen);
     }
 
     public String getPresentCellCoordinates() {
