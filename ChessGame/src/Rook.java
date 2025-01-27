@@ -1,4 +1,4 @@
-public class Rook {
+public class Rook extends Figure {
     private final char[][] board;
 
     public Rook(char[][] board) {
@@ -24,7 +24,6 @@ public class Rook {
     }
 
     protected boolean checkIsFigureInHorizontalLine(int startX, int endX, int constantY) {
-        System.out.println(startX + " " + endX + " " + constantY);
         if (endX - startX > 0) {
             for (int i = startX + 1; i < endX; i++) {
                 if (board[constantY][i] != '.') {
