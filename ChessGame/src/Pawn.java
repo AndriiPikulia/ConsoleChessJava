@@ -1,8 +1,7 @@
 public class Pawn extends Figure {
-    private final char[][] board;
 
     public Pawn(char[][] board) {
-        this.board = board;
+        super.board = board;
     }
 
     protected void move(int presentX, int presentY, int nextX, int nextY){
