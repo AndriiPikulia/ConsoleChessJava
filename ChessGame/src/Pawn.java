@@ -5,7 +5,7 @@ public class Pawn extends Figure {
         this.board = board;
     }
 
-    protected void movePawn(int presentX, int presentY, int nextX, int nextY){
+    protected void move(int presentX, int presentY, int nextX, int nextY){
     int yLength = Math.abs(nextY - presentY);
 
     boolean isPossibleMovePawn = (presentX == nextX && yLength == 1 && nextY < presentY && board[nextY][nextX] == '.');

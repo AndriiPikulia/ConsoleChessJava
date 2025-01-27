@@ -71,7 +71,7 @@ public class ChessController {
         }
 
         if (Character.toLowerCase(board[presentNumberCoordinate][presentLetterKeyToNumber]) == 'p') {
-            model.pawn.movePawn(presentLetterKeyToNumber, presentNumberCoordinate, nextLetterKeyToNumber, nextNumberCoordinate);
+            model.pawn.move(presentLetterKeyToNumber, presentNumberCoordinate, nextLetterKeyToNumber, nextNumberCoordinate);
             return board;
         }
 
