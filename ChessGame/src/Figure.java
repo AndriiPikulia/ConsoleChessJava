@@ -1,9 +1,7 @@
 abstract public class Figure {
     protected char[][] board;
 
-    protected void move(int presentX, int presentY, int nextX, int nextY){
-
-    }
+    abstract protected void move(int presentX, int presentY, int nextX, int nextY);
 
     protected boolean checkIsFigureInLine(int presentX, int presentY, int nextX, int nextY) {
         return presentX == nextX ? checkIsFigureInVerticalLine(presentY, nextY, presentX)
