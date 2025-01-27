@@ -13,5 +13,6 @@ public class Bishop extends Figure{
             board[nextY][nextX] = board[presentY][presentX];
             board[presentY][presentX] = '.';
         }
+
     }
 }

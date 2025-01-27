@@ -10,7 +10,6 @@ public class ChessMain {
         HashMap <Character, Integer> boardPositions = new HashMap <>();
         controller.fillBoardPositions(boardPositions);
 
-
         controller.updateView();
         controller.inputCoordinates(scanner);
         controller.swapFiguresOnBoard(model.board,boardPositions);
