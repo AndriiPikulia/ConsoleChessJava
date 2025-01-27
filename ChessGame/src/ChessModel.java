@@ -16,6 +16,7 @@ public class ChessModel {
         this.knight = new Knight(board);
         this.pawn = new Pawn(board);
         this.rook = new Rook(board);
+        this.figures = new HashMap<>();
         this.bishop = new Bishop(board);
         this.queen = new Queen(board);
 
