@@ -70,10 +70,16 @@ public class ChessController {
             return board;
         }
 
-        if (Character.toLowerCase(board[presentNumberCoordinate][nextLetterKeyToNumber]) == 'p') {
+        if (Character.toLowerCase(board[presentNumberCoordinate][presentLetterKeyToNumber]) == 'p') {
             model.pawn.movePawn(presentLetterKeyToNumber, presentNumberCoordinate, nextLetterKeyToNumber, nextNumberCoordinate);
             return board;
         }
+
+        if (Character.toLowerCase(board[presentNumberCoordinate][presentLetterKeyToNumber]) == 'r') {
+            model.rook.move(presentLetterKeyToNumber, presentNumberCoordinate, nextLetterKeyToNumber, nextNumberCoordinate);
+            return board;
+        }
+
 
 
         char temp = board[presentNumberCoordinate][presentLetterKeyToNumber];

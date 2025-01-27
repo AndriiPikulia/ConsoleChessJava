@@ -3,10 +3,12 @@ public class ChessModel {
     String nextCellCoordinates;
     Knight knight;
     Pawn pawn;
+    Rook rook;
 
     public ChessModel() {
         this.knight = new Knight(board);
         this.pawn = new Pawn(board);
+        this.rook = new Rook(board);
     }
 
     public String getPresentCellCoordinates() {
@@ -28,8 +30,8 @@ public class ChessModel {
     char[][] board = {{'R','N','B','Q','K','B','N','R'},
             {'P','P','P','P','P','P','P','P'},
             {'.','.','.','.','.','.','.','.'},
-            {'.','.','.','.','.','.','.','.'},
-            {'.','.','.','.','.','.','.','.'},
+            {'.','.','.','.','R','.','.','.'},
+            {'.','.','.','.','.','.','r','.'},
             {'.','.','.','.','.','.','.','.'},
             {'p','p','p','p','p','p','p','p'},
             {'r','n','b','q','k','b','n','r'}};
