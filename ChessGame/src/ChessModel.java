@@ -7,16 +7,22 @@ public class ChessModel {
     Knight knight;
     Pawn pawn;
     Rook rook;
+    Bishop bishop;
+
 
     public ChessModel() {
         this.knight = new Knight(board);
         this.pawn = new Pawn(board);
         this.rook = new Rook(board);
         this.figures = new HashMap<>();
+        this.bishop = new Bishop(board);
+
 
         figures.put('n', knight);
         figures.put('p', pawn);
         figures.put('r', rook);
+        figures.put('b', bishop);
+
     }
 
     public String getPresentCellCoordinates() {
