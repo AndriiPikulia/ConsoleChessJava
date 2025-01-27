@@ -1,6 +1,3 @@
-import java.util.HashMap;
-import java.util.Map;
-
 public class ChessView {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLUE = "\u001B[34m";

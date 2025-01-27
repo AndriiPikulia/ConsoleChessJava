@@ -1,8 +1,7 @@
-public class Knight {
-    private final char[][] board;
+public class Knight extends Figure {
 
     public Knight(char[][] board) {
-        this.board = board;
+        super.board = board;
     }
 
     protected void move(int presentX, int presentY, int nextX, int nextY) {
