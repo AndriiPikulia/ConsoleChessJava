@@ -9,6 +9,7 @@ public class ChessModel {
     Rook rook;
     Bishop bishop;
     Queen queen;
+    King king;
 
     public ChessModel() {
         this.figures = new HashMap<>();
@@ -19,12 +20,14 @@ public class ChessModel {
         this.figures = new HashMap<>();
         this.bishop = new Bishop(board);
         this.queen = new Queen(board);
+        this.king = new King(board);
 
         figures.put('n', knight);
         figures.put('p', pawn);
         figures.put('r', rook);
         figures.put('b', bishop);
         figures.put('q', queen);
+        figures.put('k', king);
     }
 
     public String getPresentCellCoordinates() {
