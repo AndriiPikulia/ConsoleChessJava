@@ -41,4 +41,5 @@ abstract public class Figure {
 
         return isMoveSuccessful;
     }
+
 }

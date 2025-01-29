@@ -19,7 +19,6 @@ public class ChessModel {
         this.knight = new Knight(board);
         this.pawn = new Pawn(board);
         this.rook = new Rook(board);
-        this.figures = new HashMap<>();
         this.bishop = new Bishop(board);
         this.queen = new Queen(board);
         this.king = new King(board);
@@ -33,6 +32,10 @@ public class ChessModel {
         figures.put('b', bishop);
         figures.put('q', queen);
         figures.put('k', king);
+    }
+
+    public HashMap<Character, Figure> getFigures() {
+        return figures;
     }
 
     public String getPresentCellCoordinates() {
