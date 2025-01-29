@@ -9,7 +9,7 @@ public class Rook extends Figure {
         int xDifference = presentX - nextX;
         int yDifference = presentY - nextY;
 
-        boolean isPossibleMove = xDifference == 0 || yDifference == 0;
+        boolean isPossibleMove = (xDifference >= 0 && yDifference == 0) || (xDifference == 0 && yDifference > 0);
         boolean isBlockedByOtherFigures = checkIsFigureInLine(presentX, presentY, nextX, nextY);
 
         if (isPossibleMove && !isBlockedByOtherFigures) {

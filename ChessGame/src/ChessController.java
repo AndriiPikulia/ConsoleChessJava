@@ -11,19 +11,19 @@ public class ChessController {
         this.view = view;
     }
 
-    public void updateView(){
+    public void updateView() {
         view.printBoard(model.board);
     }
 
     public void fillBoardPositions(HashMap<Character, Integer> boardPositions) {
-        boardPositions.put('a',1);
-        boardPositions.put('b',2);
-        boardPositions.put('c',3);
-        boardPositions.put('d',4);
-        boardPositions.put('e',5);
-        boardPositions.put('f',6);
-        boardPositions.put('g',7);
-        boardPositions.put('h',8);
+        boardPositions.put('a', 1);
+        boardPositions.put('b', 2);
+        boardPositions.put('c', 3);
+        boardPositions.put('d', 4);
+        boardPositions.put('e', 5);
+        boardPositions.put('f', 6);
+        boardPositions.put('g', 7);
+        boardPositions.put('h', 8);
     }
 
     public void inputCoordinates(Scanner scanner) {
@@ -40,6 +40,7 @@ public class ChessController {
     public char getLetterCoordinate(String presentCellCoordinates) {
         return presentCellCoordinates.charAt(0);
     }
+
     public int getNumberCoordinate(String presentCellCoordinates) {
         return Integer.parseInt(presentCellCoordinates.substring(1));
     }
@@ -49,24 +50,29 @@ public class ChessController {
         int presentLetterKeyToNumber = 0;
 
         char presentLetterCoordinate = getLetterCoordinate(model.getPresentCellCoordinates());
-        int presentNumberCoordinate = (getNumberCoordinate(model.getPresentCellCoordinates()))-1;
+        int presentNumberCoordinate = (getNumberCoordinate(model.getPresentCellCoordinates())) - 1;
 
         char nextLetterCoordinate = getLetterCoordinate(model.getNextCellCoordinates());
-        int nextNumberCoordinate = (getNumberCoordinate(model.getNextCellCoordinates()))-1;
+        int nextNumberCoordinate = (getNumberCoordinate(model.getNextCellCoordinates())) - 1;
 
-        for(Map.Entry<Character, Integer> entry : boardPositions.entrySet()) {
-            if(entry.getKey() == presentLetterCoordinate) {
-                presentLetterKeyToNumber = entry.getValue()-1;
+        for (Map.Entry<Character, Integer> entry : boardPositions.entrySet()) {
+            if (entry.getKey() == presentLetterCoordinate) {
+                presentLetterKeyToNumber = entry.getValue() - 1;
             }
         }
-        for(Map.Entry<Character, Integer> entry : boardPositions.entrySet()) {
-            if(entry.getKey() == nextLetterCoordinate) {
-                nextLetterKeyToNumber = entry.getValue()-1;
+        for (Map.Entry<Character, Integer> entry : boardPositions.entrySet()) {
+            if (entry.getKey() == nextLetterCoordinate) {
+                nextLetterKeyToNumber = entry.getValue() - 1;
             }
         }
 
         char figureSymbol = board[presentNumberCoordinate][presentLetterKeyToNumber];
-        moveFigure(figureSymbol, presentLetterKeyToNumber, presentNumberCoordinate, nextLetterKeyToNumber, nextNumberCoordinate);
+
+        if (('k' == figureSymbol)) {
+            RogueOrKingMove(figureSymbol, presentLetterKeyToNumber, presentNumberCoordinate, nextLetterKeyToNumber, nextNumberCoordinate);
+        } else {
+            moveFigure(figureSymbol, presentLetterKeyToNumber, presentNumberCoordinate, nextLetterKeyToNumber, nextNumberCoordinate);
+        }
 
         return board;
     }
@@ -78,7 +84,23 @@ public class ChessController {
         if (figure == null) {
             return;
         }
-
         figure.move(presentX, presentY, nextX, nextY);
     }
-}
+
+    public void RogueOrKingMove(char figureSymbol, int presentX, int presentY, int nextX, int nextY) {
+        if ((nextX == presentX + 2)) {
+                moveFigure(figureSymbol, presentX, presentY, nextX, nextY);
+                moveFigure('r', 7, 7, 5, 7);
+            }
+
+            else if ((nextX == presentX - 2)) {
+                moveFigure(figureSymbol, presentX, presentY, nextX, nextY);
+                moveFigure('r', 0, 7, 3, 7);
+            }
+
+            else {
+                moveFigure(figureSymbol, presentX, presentY, nextX, nextY);
+            }
+        }
+    }
+
