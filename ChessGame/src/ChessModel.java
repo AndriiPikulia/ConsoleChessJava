@@ -35,6 +35,11 @@ public class ChessModel {
         figures.put('k', king);
     }
 
+    public HashMap<Character,Figure> getFigures() {
+        return figures;
+    }
+
+
     public String getPresentCellCoordinates() {
         return presentCellCoordinates;
     }
