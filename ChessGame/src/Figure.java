@@ -24,5 +24,4 @@ abstract public class Figure {
 
         return false;
     }
-
 }
