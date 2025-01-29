@@ -3,6 +3,8 @@ import java.util.HashMap;
 public class ChessModel {
     String presentCellCoordinates;
     String nextCellCoordinates;
+    int[] whiteKingCoordinates;
+    int[] blackKingCoordinates;
     HashMap<Character, Figure> figures;
     Knight knight;
     Pawn pawn;
@@ -21,6 +23,9 @@ public class ChessModel {
         this.bishop = new Bishop(board);
         this.queen = new Queen(board);
         this.king = new King(board);
+
+        whiteKingCoordinates = new int[] {4, 0};
+        blackKingCoordinates = new int[] {4, 7};
 
         figures.put('n', knight);
         figures.put('p', pawn);

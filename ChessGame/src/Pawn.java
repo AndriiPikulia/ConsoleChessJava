@@ -4,7 +4,7 @@ public class Pawn extends Figure {
         super.board = board;
     }
 
-    protected void move(int presentX, int presentY, int nextX, int nextY){
+    protected boolean move(int presentX, int presentY, int nextX, int nextY){
     int yLength = Math.abs(nextY - presentY);
     char pawn = board[presentY][presentX];
 
@@ -28,6 +28,20 @@ public class Pawn extends Figure {
     if(whitePawnMove || blackPawnMove){
         board[nextY][nextX] = board[presentY][presentX];
         board[presentY][presentX] = '.';
+        return true;
     }
+
+    return false;
 }
+
+    @Override
+    protected boolean checkCanAttackField(int pawnX, int pawnY, int fieldX, int fieldY) {
+        boolean isPawnWhite = checkIsFigureWhite(pawnX, pawnY);
+
+        if(isPawnWhite && pawnY + 1 == fieldY && (pawnX + 1 == fieldX || pawnX - 1 == fieldX)) {
+            return true;
+        }
+
+        return !isPawnWhite && pawnY - 1 == fieldY && (pawnX + 1 == fieldX || pawnX - 1 == fieldX);
+    }
 }

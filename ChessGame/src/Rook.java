@@ -5,7 +5,7 @@ public class Rook extends Figure {
     }
 
     @Override
-    protected void move(int presentX, int presentY, int nextX, int nextY) {
+    protected boolean move(int presentX, int presentY, int nextX, int nextY) {
         int xDifference = presentX - nextX;
         int yDifference = presentY - nextY;
 
@@ -15,7 +15,10 @@ public class Rook extends Figure {
         if (isPossibleMove && !isBlockedByOtherFigures) {
             board[nextY][nextX] = board[presentY][presentX];
             board[presentY][presentX] = '.';
+            return true;
         }
+
+        return false;
     }
 
 }
