@@ -19,6 +19,10 @@ public class Pawn extends Figure {
         boolean isPossibleMovePawnWhite = (presentX == nextX && yLength == 1 && presentY < nextY && board[nextY][nextX] == '.'
                 || isWhitePawnStart && presentX == nextX && yLength == 2 && presentY < nextY && board[nextY][nextX] == '.');
 
+    protected boolean move(int presentX, int presentY, int nextX, int nextY){
+    int yLength = Math.abs(nextY - presentY);
+    char pawn = board[presentY][presentX];
+
         boolean isPossibleMovePawnBlack = (presentX == nextX && yLength == 1 && presentY > nextY && board[nextY][nextX] == '.'
                 || isBlackPawnStart && presentX == nextX && yLength == 2 && presentY > nextY && board[nextY][nextX] == '.');
 
@@ -55,3 +59,25 @@ public class Pawn extends Figure {
         }
     }
 }
+
+    if(whitePawnMove || blackPawnMove){
+        board[nextY][nextX] = board[presentY][presentX];
+        board[presentY][presentX] = '.';
+        return true;
+    }
+
+    return false;
+}
+
+    @Override
+    protected boolean checkCanAttackField(int pawnX, int pawnY, int fieldX, int fieldY) {
+        boolean isPawnWhite = checkIsFigureWhite(pawnX, pawnY);
+
+        if(isPawnWhite && pawnY + 1 == fieldY && (pawnX + 1 == fieldX || pawnX - 1 == fieldX)) {
+            return true;
+        }
+
+        return !isPawnWhite && pawnY - 1 == fieldY && (pawnX + 1 == fieldX || pawnX - 1 == fieldX);
+    }
+}
+
