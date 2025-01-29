@@ -81,6 +81,10 @@ public class ChessController {
         if (figure == null) {
             return;
         }
+      
+        figure.move(presentX, presentY, nextX, nextY);
+        if(figureSymbolLowerCase == 'P' || figureSymbolLowerCase == 'p') {
+            model.pawn.promotion(nextX, nextY, model.getFigures(), scanner);
 
         boolean canBeKingAttackedAfterMove = checkCanBeKingAttackedAfterMove(presentX, presentY, nextX, nextY);
 
