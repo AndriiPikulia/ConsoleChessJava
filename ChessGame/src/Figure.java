@@ -1,7 +1,7 @@
 abstract public class Figure {
     protected char[][] board;
 
-    abstract protected void move(int presentX, int presentY, int nextX, int nextY);
+    abstract protected boolean move(int presentX, int presentY, int nextX, int nextY);
 
     protected boolean checkIsFigureInLine(int startX, int startY, int endX, int endY) {
         int indexIAddition = endX - startX > 0 ? 1 : -1;
@@ -25,4 +25,7 @@ abstract public class Figure {
         return false;
     }
 
+    protected boolean checkIsFigureWhite(int x, int y) {
+        return Character.isUpperCase(board[y][x]);
+    }
 }
