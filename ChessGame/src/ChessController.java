@@ -79,6 +79,18 @@ public class ChessController {
             return;
         }
 
-        figure.move(presentX, presentY, nextX, nextY);
+        boolean isMoveSuccessful = figure.move(presentX, presentY, nextX, nextY);
+
+        if (figureSymbolLowerCase == 'k' && isMoveSuccessful) {
+            boolean isKingWhite = figure.checkIsFigureWhite(nextX, nextY);
+
+            if (isKingWhite) {
+                model.whiteKingCoordintates = new int[] {nextX, nextY};
+            }
+
+            if (!isKingWhite) {
+                model.blackKingCoordintates = new int[] {nextX, nextY};
+            }
+        }
     }
 }

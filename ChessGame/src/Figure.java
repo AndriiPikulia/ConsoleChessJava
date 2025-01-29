@@ -28,4 +28,18 @@ abstract public class Figure {
     protected boolean checkIsFigureWhite(int x, int y) {
         return Character.isUpperCase(board[y][x]);
     }
+
+    protected boolean checkCanAttackField(int figureX, int figureY, int fieldX, int fieldY) {
+        char field = board[fieldY][fieldX];
+        char figure = board[figureY][figureX];
+        boolean isMoveSuccessful = move(figureX, figureY, fieldX, fieldY);
+
+        if(isMoveSuccessful) {
+            board[fieldY][fieldX] = field;
+            board[figureY][figureX] = figure;
+            return true;
+        }
+
+        return false;
+    }
 }
