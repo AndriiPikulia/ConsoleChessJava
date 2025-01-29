@@ -7,6 +7,8 @@ public class ChessController {
     private final ChessModel model;
     private final ChessView view;
 
+    Scanner scanner = new Scanner(System.in);
+
     public ChessController(ChessModel model, ChessView view) {
         this.model = model;
         this.view = view;
@@ -90,6 +92,11 @@ public class ChessController {
 
         if (figureSymbolLowerCase == 'k' && isMoveSuccessful) {
             updateKingCoordinates(figure, nextX, nextY);
+        }
+        if(figureSymbolLowerCase == 'P' || figureSymbolLowerCase == 'p') {
+            model.pawn.promotion(nextX, nextY, model.getFigures(), scanner);
+            model.pawn.beat(presentX, presentY, nextX, nextY);
+            model.pawn.enPassant(presentX, presentY, nextX, nextY);
         }
     }
 

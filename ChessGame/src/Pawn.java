@@ -1,3 +1,6 @@
+import java.util.HashMap;
+import java.util.Scanner;
+
 public class Pawn extends Figure {
 
     public Pawn(char[][] board) {
@@ -33,6 +36,78 @@ public class Pawn extends Figure {
 
     return false;
 }
+
+    protected void beat(int presentX, int presentY, int nextX, int nextY) {
+        boolean isPossibleBeatWhite = (Math.abs(nextX - presentX) == 1) && (nextY - presentY == 1)
+                && board[nextY][nextX] != '.' && Character.isLowerCase(board[nextY][nextX]);
+
+        boolean isPossibleBeatBlack = (Math.abs(nextX - presentX) == 1) && (nextY - presentY == -1)
+                && board[nextY][nextX] != '.' && Character.isUpperCase(board[nextY][nextX]);
+
+        if((isPossibleBeatWhite && Character.isUpperCase(board[presentY][presentX]))
+                || (isPossibleBeatBlack && Character.isLowerCase(board[presentY][presentX]))) {
+            board[nextY][nextX] = board[presentY][presentX];
+            board[presentY][presentX] = '.';}
+
+    }
+
+    protected void promotion(int presentX, int presentY, HashMap<Character, Figure> figures, Scanner scanner) {
+        char pawn = board[presentY][presentX];
+
+        boolean isWhitePawnAtTheEnd = (pawn == 'P' && presentY == 7);
+        boolean isBlackPawnAtTheEnd = (pawn == 'p' && presentY == 0);
+
+        if (isWhitePawnAtTheEnd) {
+            System.out.println("Введіть фігуру на яку хочете перетворити пішака (N, Q, R, B):");
+            char figureSymbol = scanner.nextLine().toLowerCase().charAt(0);
+
+            if (figures.containsKey(figureSymbol)) {
+                board[presentY][presentX] = Character.toUpperCase(figureSymbol);
+            }
+        }
+        if (isBlackPawnAtTheEnd) {
+            System.out.println("Введіть фігуру на яку хочете перетворити пішака (n, q, r, b):");
+            char figureSymbol = scanner.nextLine().toLowerCase().charAt(0);
+
+            if (figures.containsKey(figureSymbol)) {
+                board[presentY][presentX] = Character.toLowerCase(figureSymbol);
+            }
+        }
+    }
+
+    protected void enPassant(int presentX, int presentY, int nextX, int nextY) {
+        boolean canWhiteEnPassant = Character.isUpperCase(board[presentY][presentX])
+                && presentY == 4
+                && nextY == 5
+                && Math.abs(nextX - presentX) == 1
+                && (board[presentY][presentX + 1] == 'p' || board[presentY][presentX - 1] == 'p');
+
+        boolean canBlackEnPassant = Character.isLowerCase(board[presentY][presentX])
+                && presentY == 3
+                && nextY == 2
+                && Math.abs(nextX - presentX) == 1
+                && (board[presentY][presentX + 1] == 'P' || board[presentY][presentX - 1] == 'P');
+
+        if (canWhiteEnPassant) {
+            enPassantReplacer(presentX, presentY, nextX, nextY);
+        }
+        else if (canBlackEnPassant) {
+            enPassantReplacer(presentX, presentY, nextX, nextY);
+        }
+    }
+
+    protected void enPassantReplacer(int presentX, int presentY, int nextX, int nextY) {
+        board[nextY][nextX] = board[presentY][presentX];
+        board[presentY][presentX] = '.';
+
+        if (nextX - presentX == 1) {
+            board[presentY][presentX + 1] = '.';
+        }
+        else if (nextX - presentX == -1) {
+            board[presentY][presentX - 1] = '.';
+        }
+    }
+
 
     @Override
     protected boolean checkCanAttackField(int pawnX, int pawnY, int fieldX, int fieldY) {
