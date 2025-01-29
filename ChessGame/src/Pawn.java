@@ -34,6 +34,7 @@ public class Pawn extends Figure {
     return false;
 }
 
+    @Override
     protected boolean checkCanAttackField(int pawnX, int pawnY, int fieldX, int fieldY) {
         boolean isPawnWhite = checkIsFigureWhite(pawnX, pawnY);
 

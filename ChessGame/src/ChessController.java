@@ -81,21 +81,15 @@ public class ChessController {
         }
 
         boolean canBeKingAttackedAfterMove = checkCanBeKingAttackedAfterMove(presentX, presentY, nextX, nextY);
-        boolean isMoveSuccessful = false;
 
-        if (!canBeKingAttackedAfterMove) {
-            isMoveSuccessful = figure.move(presentX, presentY, nextX, nextY);
+        if (canBeKingAttackedAfterMove) {
+            return;
         }
 
-        if (figureSymbolLowerCase == 'k' && isMoveSuccessful) {
-            boolean isKingWhite = figure.checkIsFigureWhite(nextX, nextY);
+        boolean isMoveSuccessful = figure.move(presentX, presentY, nextX, nextY);
 
-            if (isKingWhite) {
-                model.whiteKingCoordinates = new int[] {nextX, nextY};
-            }
-            if (!isKingWhite) {
-                model.blackKingCoordinates = new int[] {nextX, nextY};
-            }
+        if (figureSymbolLowerCase == 'k' && isMoveSuccessful) {
+            updateKingCoordinates(figure, nextX, nextY);
         }
     }
 
@@ -144,5 +138,16 @@ public class ChessController {
         }
 
         return isAttacked;
+    }
+
+    protected void updateKingCoordinates(Figure figure, int newX, int newY) {
+        boolean isKingWhite = figure.checkIsFigureWhite(newX, newY);
+
+        if (isKingWhite) {
+            model.whiteKingCoordinates = new int[] {newX, newY};
+        }
+        if (!isKingWhite) {
+            model.blackKingCoordinates = new int[] {newX, newY};
+        }
     }
 }
