@@ -37,9 +37,8 @@ abstract public class Figure {
         if(isMoveSuccessful) {
             board[fieldY][fieldX] = field;
             board[figureY][figureX] = figure;
-            return true;
         }
 
-        return false;
+        return isMoveSuccessful;
     }
 }

@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -79,18 +80,69 @@ public class ChessController {
             return;
         }
 
-        boolean isMoveSuccessful = figure.move(presentX, presentY, nextX, nextY);
+        boolean canBeKingAttackedAfterMove = checkCanBeKingAttackedAfterMove(presentX, presentY, nextX, nextY);
+        boolean isMoveSuccessful = false;
+
+        if (!canBeKingAttackedAfterMove) {
+            isMoveSuccessful = figure.move(presentX, presentY, nextX, nextY);
+        }
 
         if (figureSymbolLowerCase == 'k' && isMoveSuccessful) {
             boolean isKingWhite = figure.checkIsFigureWhite(nextX, nextY);
 
             if (isKingWhite) {
-                model.whiteKingCoordintates = new int[] {nextX, nextY};
+                model.whiteKingCoordinates = new int[] {nextX, nextY};
             }
-
             if (!isKingWhite) {
-                model.blackKingCoordintates = new int[] {nextX, nextY};
+                model.blackKingCoordinates = new int[] {nextX, nextY};
             }
         }
+    }
+
+    public boolean checkCanBeKingAttackedAfterMove(int startX, int startY, int endX, int endY) {
+        char startFigure = model.board[startY][startX];
+        char endFigure = model.board[endY][endX];
+        boolean isStartFigureWhite = Character.isUpperCase(startFigure);
+        int[] kingCoordinates = Arrays.copyOf(isStartFigureWhite ? model.whiteKingCoordinates : model.blackKingCoordinates, 2);
+        boolean canBeKingAttackedAfterMove;
+
+        model.board[startY][startX] = '.';
+        model.board[endY][endX] = startFigure;
+        if (Character.toLowerCase(startFigure) == 'k') {
+            kingCoordinates = new int[] {endX, endY};
+        }
+
+        canBeKingAttackedAfterMove = checkIsKingAttacked(isStartFigureWhite, kingCoordinates);
+
+        model.board[startY][startX] = startFigure;
+        model.board[endY][endX] = endFigure;
+        return canBeKingAttackedAfterMove;
+    }
+
+    protected boolean checkIsKingAttacked(boolean isKingWhite, int[] kingCoordinates) {
+        boolean isAttacked = false;
+
+        outer:
+        for(int x = 0; x < model.board.length; x++) {
+            for (int y = 0; y < model.board[0].length; y++) {
+                char figureChar = model.board[y][x];
+                char figureCharLowerCase = Character.toLowerCase(figureChar);
+                boolean isFigureWhite = Character.isUpperCase(figureChar);
+
+                if (isFigureWhite == isKingWhite) {
+                    continue;
+                }
+
+                if (figureChar != '.') {
+                    isAttacked = model.figures.get(figureCharLowerCase).checkCanAttackField(x, y, kingCoordinates[0], kingCoordinates[1]);
+                }
+
+                if(isAttacked) {
+                    break outer;
+                }
+            }
+        }
+
+        return isAttacked;
     }
 }
