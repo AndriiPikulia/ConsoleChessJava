@@ -69,12 +69,12 @@ public class ChessController {
         }
 
         char figureSymbol = board[presentNumberCoordinate][presentLetterKeyToNumber];
-        moveFigure(figureSymbol, presentLetterKeyToNumber, presentNumberCoordinate, nextLetterKeyToNumber, nextNumberCoordinate);
+        moveFigure(board, figureSymbol, presentLetterKeyToNumber, presentNumberCoordinate, nextLetterKeyToNumber, nextNumberCoordinate);
 
         return board;
     }
 
-    public void moveFigure(char figureSymbol, int presentX, int presentY, int nextX, int nextY) {
+    public void moveFigure(char [][] board, char figureSymbol, int presentX, int presentY, int nextX, int nextY) {
         char figureSymbolLowerCase = Character.toLowerCase(figureSymbol);
         Figure figure = model.figures.get(figureSymbolLowerCase);
 
@@ -89,14 +89,39 @@ public class ChessController {
         }
 
         boolean isMoveSuccessful = figure.move(presentX, presentY, nextX, nextY);
+        int countKingMoves = model.king.getCountKingMoves();
+        if (figureSymbolLowerCase == 'k' && isMoveSuccessful && countKingMoves == 1) {
+            boolean isRogueKingMoveRight = (nextX == presentX + 2);
+            boolean isRogueKingMoveLeft = (nextX == presentX - 2);
 
-        if (figureSymbolLowerCase == 'k' && isMoveSuccessful) {
-            updateKingCoordinates(figure, nextX, nextY);
+            if (isRogueKingMoveLeft) {
+                System.out.println("Походили королем вліво");
+                board[nextY][nextX+1] = board[presentY][0];
+                board[presentY][0] = '.';
+                updateKingCoordinates(figure, nextX, nextY);
+            }
+
+            else if (isRogueKingMoveRight) {
+                System.out.println("Походили королем вправо");
+                board[nextY][nextX-1] = board[presentY][7];
+                board[presentY][7] = '.';
+                updateKingCoordinates(figure, nextX, nextY);
+            }
+            else{
+                System.out.println("Походили королем на 1 клітинку");
+                updateKingCoordinates(figure, nextX, nextY);
+            }
         }
-        if(figureSymbolLowerCase == 'P' || figureSymbolLowerCase == 'p') {
+
+        else if(figureSymbolLowerCase == 'P' || figureSymbolLowerCase == 'p') {
+            System.out.println("Походили пішкою");
             model.pawn.promotion(nextX, nextY, model.getFigures(), scanner);
             model.pawn.beat(presentX, presentY, nextX, nextY);
             model.pawn.enPassant(presentX, presentY, nextX, nextY);
+        }
+        else {
+            System.out.println("Походили іншою фігурою");
+            figure.move(presentX, presentY, nextX, nextY);
         }
     }
 
