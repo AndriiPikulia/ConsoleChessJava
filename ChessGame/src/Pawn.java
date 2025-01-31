@@ -7,6 +7,8 @@ public class Pawn extends Figure {
         super.board = board;
     }
 
+    private boolean pawnDoubleMove = false;
+
     protected boolean move(int presentX, int presentY, int nextX, int nextY){
     int yLength = Math.abs(nextY - presentY);
     char pawn = board[presentY][presentX];
@@ -16,7 +18,8 @@ public class Pawn extends Figure {
 
     boolean isBlockedByOtherFigures = checkIsFigureInLine(presentX, presentY, nextX, nextY);
 
-    boolean isPossibleMovePawnWhite = (presentX == nextX && yLength == 1 && presentY < nextY && board[nextY][nextX] == '.'
+    boolean isPossibleMovePawnWhite = (presentX == nextX && yLength == 1 &&
+            presentY < nextY && board[nextY][nextX] == '.'
             || isWhitePawnStart && presentX == nextX && yLength == 2 &&
             presentY < nextY && board[nextY][nextX] == '.');
 
@@ -31,6 +34,10 @@ public class Pawn extends Figure {
     if(whitePawnMove || blackPawnMove){
         board[nextY][nextX] = board[presentY][presentX];
         board[presentY][presentX] = '.';
+
+        if(yLength == 2){
+            pawnDoubleMove = true;
+        }
         return true;
     }
 
@@ -48,7 +55,6 @@ public class Pawn extends Figure {
                 || (isPossibleBeatBlack && Character.isLowerCase(board[presentY][presentX]))) {
             board[nextY][nextX] = board[presentY][presentX];
             board[presentY][presentX] = '.';}
-
     }
 
     protected void promotion(int presentX, int presentY, HashMap<Character, Figure> figures, Scanner scanner) {
@@ -75,39 +81,41 @@ public class Pawn extends Figure {
         }
     }
 
-    protected void enPassant(int presentX, int presentY, int nextX, int nextY) {
+    protected boolean enPassant(int presentX, int presentY, int nextX, int nextY) {
+        if (!pawnDoubleMove){
+            return false;
+        }
+
         boolean canWhiteEnPassant = Character.isUpperCase(board[presentY][presentX])
                 && presentY == 4
                 && nextY == 5
                 && Math.abs(nextX - presentX) == 1
-                && (board[presentY][presentX + 1] == 'p' || board[presentY][presentX - 1] == 'p');
+                && (board[presentY][presentX + 1] == 'p' || board[presentY][presentX - 1] == 'p')
+                && pawnDoubleMove;
 
         boolean canBlackEnPassant = Character.isLowerCase(board[presentY][presentX])
                 && presentY == 3
                 && nextY == 2
                 && Math.abs(nextX - presentX) == 1
-                && (board[presentY][presentX + 1] == 'P' || board[presentY][presentX - 1] == 'P');
+                && (board[presentY][presentX + 1] == 'P' || board[presentY][presentX - 1] == 'P')
+                && pawnDoubleMove;
 
-        if (canWhiteEnPassant) {
-            enPassantReplacer(presentX, presentY, nextX, nextY);
+        if (canWhiteEnPassant || canBlackEnPassant) {
+            board[nextY][nextX] = board[presentY][presentX];
+            board[presentY][presentX] = '.';
+
+            if (nextX - presentX == 1) {
+                board[presentY][presentX + 1] = '.';
+                pawnDoubleMove = false;
+            }
+            if (nextX - presentX == -1) {
+                board[presentY][presentX - 1] = '.';
+                pawnDoubleMove = false;
+            }
+            return true;
         }
-        else if (canBlackEnPassant) {
-            enPassantReplacer(presentX, presentY, nextX, nextY);
-        }
+        return false;
     }
-
-    protected void enPassantReplacer(int presentX, int presentY, int nextX, int nextY) {
-        board[nextY][nextX] = board[presentY][presentX];
-        board[presentY][presentX] = '.';
-
-        if (nextX - presentX == 1) {
-            board[presentY][presentX + 1] = '.';
-        }
-        else if (nextX - presentX == -1) {
-            board[presentY][presentX - 1] = '.';
-        }
-    }
-
 
     @Override
     protected boolean checkCanAttackField(int pawnX, int pawnY, int fieldX, int fieldY) {
