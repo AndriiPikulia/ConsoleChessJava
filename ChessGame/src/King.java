@@ -12,10 +12,17 @@ public class King extends Figure{
 
         boolean isBlockedByOtherFigures = checkIsFigureInLine(presentX, presentY, nextX, nextY);
 
-        if ((isPossibleMove || isPossibleMoveForRogue) && !isBlockedByOtherFigures) {
+        if ((isPossibleMove) && !isBlockedByOtherFigures) {
             board[nextY][nextX] = board[presentY][presentX];
             board[presentY][presentX] = '.';
-            countKingMoves++;
+            this.countKingMoves++;
+            return true;
+        }
+
+        else if(isPossibleMoveForRogue && this.countKingMoves == 0) {
+            board[nextY][nextX] = board[presentY][presentX];
+            board[presentY][presentX] = '.';
+            this.countKingMoves++;
             return true;
         }
 

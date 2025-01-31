@@ -1,6 +1,5 @@
 abstract public class Figure {
     protected char[][] board;
-    private int count;
     abstract protected boolean move(int presentX, int presentY, int nextX, int nextY);
 
     protected boolean checkIsFigureInLine(int startX, int startY, int endX, int endY) {
@@ -10,10 +9,13 @@ abstract public class Figure {
         int i = startX;
         int j = startY;
 
-        while (i != endX || j != endY){
+        while (true){
             i += i == endX ? 0 : indexIAddition;
             j += j == endY ? 0 : indexJAddition;
 
+            if(i == endX && j == endY){
+                break;
+            }
             if (board[j][i] != '.') {
                 return true;
             }

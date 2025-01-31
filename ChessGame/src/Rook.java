@@ -6,13 +6,15 @@ public class Rook extends Figure {
 
     @Override
     protected boolean move(int presentX, int presentY, int nextX, int nextY) {
-        int xDifference = presentX - nextX;
-        int yDifference = presentY - nextY;
+        int xDifference = nextX - presentX;
+        int yDifference = nextY - presentY;
 
-        boolean isPossibleMove = (xDifference >= 0 && yDifference == 0) || (xDifference == 0 && yDifference > 0);
+        boolean isPossibleMoveOy = (xDifference >= 0 && yDifference == 0) || (xDifference <= 0 && yDifference == 0);
+        boolean isPossibleMoveOx = xDifference == 0;
+
         boolean isBlockedByOtherFigures = checkIsFigureInLine(presentX, presentY, nextX, nextY);
 
-        if (isPossibleMove && !isBlockedByOtherFigures) {
+        if ((isPossibleMoveOy || isPossibleMoveOx) && !isBlockedByOtherFigures) {
             board[nextY][nextX] = board[presentY][presentX];
             board[presentY][presentX] = '.';
             System.out.println("Походили турою");

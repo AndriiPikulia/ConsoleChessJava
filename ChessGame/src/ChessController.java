@@ -90,6 +90,7 @@ public class ChessController {
 
         boolean isMoveSuccessful = figure.move(presentX, presentY, nextX, nextY);
         int countKingMoves = model.king.getCountKingMoves();
+
         if (figureSymbolLowerCase == 'k' && isMoveSuccessful && countKingMoves == 1) {
             boolean isRogueKingMoveRight = (nextX == presentX + 2);
             boolean isRogueKingMoveLeft = (nextX == presentX - 2);
@@ -121,7 +122,6 @@ public class ChessController {
         }
         else {
             System.out.println("Походили іншою фігурою");
-            figure.move(presentX, presentY, nextX, nextY);
         }
     }
 
