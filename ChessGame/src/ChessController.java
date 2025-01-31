@@ -90,8 +90,9 @@ public class ChessController {
 
         boolean isMoveSuccessful = figure.move(presentX, presentY, nextX, nextY);
         int countKingMoves = model.king.getCountKingMoves();
+        int countRookMoves = model.rook.getCountRookMoves();
 
-        if (figureSymbolLowerCase == 'k' && isMoveSuccessful && countKingMoves == 1) {
+        if (figureSymbolLowerCase == 'k' && isMoveSuccessful && countKingMoves == 1 && countRookMoves == 0) {
             boolean isRogueKingMoveRight = (nextX == presentX + 2);
             boolean isRogueKingMoveLeft = (nextX == presentX - 2);
 
@@ -108,10 +109,6 @@ public class ChessController {
                 board[presentY][7] = '.';
                 updateKingCoordinates(figure, nextX, nextY);
             }
-            else{
-                System.out.println("Походили королем на 1 клітинку");
-                updateKingCoordinates(figure, nextX, nextY);
-            }
         }
 
         else if(figureSymbolLowerCase == 'P' || figureSymbolLowerCase == 'p') {
@@ -120,6 +117,12 @@ public class ChessController {
             model.pawn.beat(presentX, presentY, nextX, nextY);
             model.pawn.enPassant(presentX, presentY, nextX, nextY);
         }
+
+        else if(figureSymbolLowerCase == 'k' && isMoveSuccessful){
+            System.out.println("Походили королем на 1 клітинку");
+            updateKingCoordinates(figure, nextX, nextY);
+        }
+
         else {
             System.out.println("Походили іншою фігурою");
         }

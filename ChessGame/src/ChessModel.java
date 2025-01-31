@@ -22,7 +22,7 @@ public class ChessModel {
         this.figures = new HashMap<>();
         this.bishop = new Bishop(board);
         this.queen = new Queen(board);
-        this.king = new King(board);
+        this.king = new King(board, rook);
 
         whiteKingCoordinates = new int[] {4, 0};
         blackKingCoordinates = new int[] {4, 7};

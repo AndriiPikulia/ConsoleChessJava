@@ -10,12 +10,13 @@ abstract public class Figure {
         int j = startY;
 
         while (true){
-            i += i == endX ? 0 : indexIAddition;
-            j += j == endY ? 0 : indexJAddition;
-
             if(i == endX && j == endY){
                 break;
             }
+
+            i += i == endX ? 0 : indexIAddition;
+            j += j == endY ? 0 : indexJAddition;
+
             if (board[j][i] != '.') {
                 return true;
             }

@@ -4,6 +4,12 @@ public class Rook extends Figure {
         super.board = board;
     }
 
+    private int countRookMoves;
+
+    public Rook() {
+
+    }
+
     @Override
     protected boolean move(int presentX, int presentY, int nextX, int nextY) {
         int xDifference = nextX - presentX;
@@ -18,10 +24,15 @@ public class Rook extends Figure {
             board[nextY][nextX] = board[presentY][presentX];
             board[presentY][presentX] = '.';
             System.out.println("Походили турою");
+            this.countRookMoves++;
             return true;
         }
 
         return false;
+    }
+
+    public int getCountRookMoves() {
+        return countRookMoves;
     }
 
 }

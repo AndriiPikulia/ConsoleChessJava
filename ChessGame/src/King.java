@@ -1,9 +1,10 @@
 public class King extends Figure{
-    public King(char[][] board) {
-        super.board = board;
-    }
-
+    private Rook rook;
     private int countKingMoves;
+    public King(char[][] board, Rook rook) {
+        super.board = board;
+        this.rook = rook;
+    }
 
     @Override
     protected boolean move(int presentX, int presentY, int nextX, int nextY) {
@@ -11,6 +12,7 @@ public class King extends Figure{
         boolean isPossibleMoveForRogue = (Math.abs(nextX - presentX) == 2 && Math.abs(nextY - presentY) == 0);
 
         boolean isBlockedByOtherFigures = checkIsFigureInLine(presentX, presentY, nextX, nextY);
+        int countRookMoves = rook.getCountRookMoves();
 
         if ((isPossibleMove) && !isBlockedByOtherFigures) {
             board[nextY][nextX] = board[presentY][presentX];
@@ -19,7 +21,7 @@ public class King extends Figure{
             return true;
         }
 
-        else if(isPossibleMoveForRogue && this.countKingMoves == 0) {
+        else if(isPossibleMoveForRogue && this.countKingMoves == 0 && !isBlockedByOtherFigures && countRookMoves == 0) {
             board[nextY][nextX] = board[presentY][presentX];
             board[presentY][presentX] = '.';
             this.countKingMoves++;
@@ -32,4 +34,5 @@ public class King extends Figure{
     public int getCountKingMoves() {
         return countKingMoves;
     }
+
 }
