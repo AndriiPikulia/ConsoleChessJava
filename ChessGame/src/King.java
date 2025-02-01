@@ -8,8 +8,8 @@ public class King extends Figure{
 
     @Override
     protected boolean move(int presentX, int presentY, int nextX, int nextY) {
-        boolean isPossibleMove = (Math.abs(nextX - presentX) == 1 || Math.abs(nextY - presentY) == 1);
         boolean isPossibleMoveForRogue = (Math.abs(nextX - presentX) == 2 && Math.abs(nextY - presentY) == 0);
+        boolean isPossibleMove = (Math.abs(nextX - presentX) <= 1 && Math.abs(nextY - presentY) <= 1);
 
         boolean isBlockedByOtherFigures = checkIsFigureInLine(presentX, presentY, nextX, nextY);
         int countRookMoves = rook.getCountRookMoves();

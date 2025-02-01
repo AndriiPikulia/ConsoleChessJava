@@ -126,6 +126,10 @@ public class ChessController {
         else {
             System.out.println("Походили іншою фігурою");
         }
+        if (checkIsCheckmate(!figure.checkIsFigureWhite(nextX, nextY))) {
+            System.out.println("Checkmate");
+            System.exit(0);
+        }
     }
 
     public boolean checkCanBeKingAttackedAfterMove(int startX, int startY, int endX, int endY) {
@@ -184,5 +188,55 @@ public class ChessController {
         if (!isKingWhite) {
             model.blackKingCoordinates = new int[] {newX, newY};
         }
+    }
+
+    protected boolean checkIsCheckmate(boolean isCheckForWhite) {
+        int[] kingCoordinates = isCheckForWhite ? model.whiteKingCoordinates : model.blackKingCoordinates;
+
+        for (int x = 0; x < model.board.length; x++) {
+            for (int y = 0; y < model.board[0].length; y++) {
+                boolean isWhite = Character.isUpperCase(model.board[y][x]);
+                if (isWhite != isCheckForWhite || model.board[y][x] == '.') {
+                    continue;
+                }
+
+                if (checkCanFigureAvoidCheckmate(x, y, isCheckForWhite, kingCoordinates)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    protected boolean checkCanFigureAvoidCheckmate(int startX, int startY, boolean isWhite, int[] kingCoordinates) {
+        Figure figure = model.figures.get(Character.toLowerCase(model.board[startY][startX]));
+
+        for (int x = 0; x < model.board.length; x++) {
+            for (int y = 0; y < model.board[0].length; y++) {
+                char attackedField = model.board[y][x];
+
+                if (Character.toLowerCase(model.board[startY][startX]) == 'k') {
+                    kingCoordinates[0] = x;
+                    kingCoordinates[1] = y;
+                }
+
+                boolean isMoveSuccessful = figure.move(startX, startY, x, y);
+                boolean isKingAttacked = checkIsKingAttacked(isWhite, kingCoordinates);
+
+                if (isMoveSuccessful) {
+                    model.board[startY][startX] = model.board[y][x];
+                    model.board[y][x] = attackedField;
+                }
+                if (Character.toLowerCase(model.board[startY][startX]) == 'k') {
+                    kingCoordinates[0] = startX;
+                    kingCoordinates[1] = startY;
+                }
+                if (isMoveSuccessful && !isKingAttacked) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
