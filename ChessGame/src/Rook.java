@@ -4,6 +4,12 @@ public class Rook extends Figure {
         super.board = board;
     }
 
+    private int countRookMoves;
+
+    public Rook() {
+
+    }
+
     @Override
     protected boolean move(int presentX, int presentY, int nextX, int nextY) {
         int xDifference = nextX - presentX;

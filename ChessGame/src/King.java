@@ -1,5 +1,6 @@
 public class King extends Figure{
     private Rook rook;
+
     private static int countKingMoves;
 
     public King(char[][] board, Rook rook) {
@@ -13,6 +14,7 @@ public class King extends Figure{
         boolean isPossibleMove = (Math.abs(nextX - presentX) <= 1 && Math.abs(nextY - presentY) <= 1);
 
         boolean isBlockedByOtherFigures = checkIsFigureInLine(presentX, presentY, nextX, nextY);
+
         int countRookMoves = Rook.getCountRookMoves();
         System.out.println("countRookMovesKing" + countRookMoves);
         if ((isPossibleMove) && !isBlockedByOtherFigures) {
@@ -28,12 +30,11 @@ public class King extends Figure{
             countKingMoves++;
             return true;
         }
-
         return false;
     }
 
+
     public static int getCountKingMoves() {
         return countKingMoves;
-    }
 
 }
