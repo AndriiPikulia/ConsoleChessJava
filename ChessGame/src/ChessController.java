@@ -77,7 +77,7 @@ public class ChessController {
     public void moveFigure(char [][] board, char figureSymbol, int presentX, int presentY, int nextX, int nextY) {
         char figureSymbolLowerCase = Character.toLowerCase(figureSymbol);
         Figure figure = model.figures.get(figureSymbolLowerCase);
-
+        System.out.println(figureSymbolLowerCase);
         if (figure == null) {
             return;
         }
@@ -89,10 +89,21 @@ public class ChessController {
         }
 
         boolean isMoveSuccessful = figure.move(presentX, presentY, nextX, nextY);
-        int countKingMoves = model.king.getCountKingMoves();
-        int countRookMoves = model.rook.getCountRookMoves();
 
-        if (figureSymbolLowerCase == 'k' && isMoveSuccessful && countKingMoves == 1 && countRookMoves == 0) {
+        if(!isMoveSuccessful) {
+            return;
+        }
+
+        if(figureSymbolLowerCase != 'k' && figureSymbolLowerCase != 'p' && figureSymbol != 'P') {
+            return;
+        }
+
+        int countKingMoves = King.getCountKingMoves();
+        int countRookMoves = Rook.getCountRookMoves();
+        System.out.println("countKingMoves" + countKingMoves);
+        System.out.println("countRookMoves" + countRookMoves);
+
+        if (figureSymbolLowerCase == 'k' /*&& countKingMoves == 2 && countRookMoves == 0*/) {
             boolean isRogueKingMoveRight = (nextX == presentX + 2);
             boolean isRogueKingMoveLeft = (nextX == presentX - 2);
 
@@ -109,27 +120,35 @@ public class ChessController {
                 board[presentY][7] = '.';
                 updateKingCoordinates(figure, nextX, nextY);
             }
+
+            else {
+                System.out.println("Походили королем на 1 клітинку");
+                updateKingCoordinates(figure, nextX, nextY);
+            }
+
+            if (checkIsCheckmate(!figure.checkIsFigureWhite(nextX, nextY))) {
+                System.out.println("Checkmate");
+            }
         }
 
-        else if(figureSymbolLowerCase == 'P' || figureSymbolLowerCase == 'p') {
+         else if(figureSymbolLowerCase == 'P' || figureSymbolLowerCase == 'p') {
             System.out.println("Походили пішкою");
             model.pawn.promotion(nextX, nextY, model.getFigures(), scanner);
             model.pawn.beat(presentX, presentY, nextX, nextY);
             model.pawn.enPassant(presentX, presentY, nextX, nextY);
         }
 
-        else if(figureSymbolLowerCase == 'k' && isMoveSuccessful){
+       /* else if(figureSymbolLowerCase == 'k'){
             System.out.println("Походили королем на 1 клітинку");
             updateKingCoordinates(figure, nextX, nextY);
-        }
+            if (checkIsCheckmate(!figure.checkIsFigureWhite(nextX, nextY))) {
+                System.out.println("Checkmate");
+            }
+        }*/
 
-        else {
-            System.out.println("Походили іншою фігурою");
-        }
-        if (checkIsCheckmate(!figure.checkIsFigureWhite(nextX, nextY))) {
+        /*else if (checkIsCheckmate(!figure.checkIsFigureWhite(nextX, nextY))) {
             System.out.println("Checkmate");
-            System.exit(0);
-        }
+        }*/
     }
 
     public boolean checkCanBeKingAttackedAfterMove(int startX, int startY, int endX, int endY) {
@@ -220,19 +239,18 @@ public class ChessController {
                     kingCoordinates[0] = x;
                     kingCoordinates[1] = y;
                 }
-
-                boolean isMoveSuccessful = figure.move(startX, startY, x, y);
+            //    boolean isMoveSuccessful = figure.move(startX, startY, x, y);
                 boolean isKingAttacked = checkIsKingAttacked(isWhite, kingCoordinates);
 
-                if (isMoveSuccessful) {
+             /*   if (isMoveSuccessful) {
                     model.board[startY][startX] = model.board[y][x];
                     model.board[y][x] = attackedField;
-                }
+                }*/
                 if (Character.toLowerCase(model.board[startY][startX]) == 'k') {
                     kingCoordinates[0] = startX;
                     kingCoordinates[1] = startY;
                 }
-                if (isMoveSuccessful && !isKingAttacked) {
+                if (/*isMoveSuccessful &&*/ !isKingAttacked) {
                     return true;
                 }
             }

@@ -32,6 +32,7 @@ public class Pawn extends Figure {
     boolean blackPawnMove = !isBlockedByOtherFigures && pawn == 'p' && isPossibleMovePawnBlack;
 
     if(whitePawnMove || blackPawnMove){
+        System.out.println("Pawn mode in Pawn class");
         board[nextY][nextX] = board[presentY][presentX];
         board[presentY][presentX] = '.';
 
