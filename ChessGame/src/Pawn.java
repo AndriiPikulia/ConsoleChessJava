@@ -127,4 +127,8 @@ public class Pawn extends Figure {
 
         return !isPawnWhite && pawnY - 1 == fieldY && (pawnX + 1 == fieldX || pawnX - 1 == fieldX);
     }
+
+    protected boolean imitateMove(int presentX, int presentY, int nextX, int nextY) {
+        return move(presentX, presentY, nextX, nextY);
+    }
 }

@@ -6,9 +6,6 @@ public class Rook extends Figure {
 
     private int countRookMoves;
 
-    public Rook() {
-
-    }
 
     @Override
     protected boolean move(int presentX, int presentY, int nextX, int nextY) {
@@ -35,4 +32,21 @@ public class Rook extends Figure {
         return countRookMoves;
     }
 
+    protected boolean imitateMove(int presentX, int presentY, int nextX, int nextY) {
+        int xDifference = nextX - presentX;
+        int yDifference = nextY - presentY;
+
+        boolean isPossibleMoveOy = (xDifference >= 0 && yDifference == 0) || (xDifference <= 0 && yDifference == 0);
+        boolean isPossibleMoveOx = xDifference == 0;
+
+        boolean isBlockedByOtherFigures = checkIsFigureInLine(presentX, presentY, nextX, nextY);
+
+        if ((isPossibleMoveOy || isPossibleMoveOx) && !isBlockedByOtherFigures) {
+            board[nextY][nextX] = board[presentY][presentX];
+            board[presentY][presentX] = '.';
+            return true;
+        }
+
+        return false;
+    }
 }

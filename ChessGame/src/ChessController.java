@@ -201,6 +201,7 @@ public class ChessController {
                 }
 
                 if (checkCanFigureAvoidCheckmate(x, y, isCheckForWhite, kingCoordinates)) {
+                    System.out.println("x: " + x + "; y: " + y);
                     return false;
                 }
             }
@@ -221,7 +222,7 @@ public class ChessController {
                     kingCoordinates[1] = y;
                 }
 
-                boolean isMoveSuccessful = figure.move(startX, startY, x, y);
+                boolean isMoveSuccessful = figure.imitateMove(startX, startY, x, y);
                 boolean isKingAttacked = checkIsKingAttacked(isWhite, kingCoordinates);
 
                 if (isMoveSuccessful) {
@@ -233,6 +234,7 @@ public class ChessController {
                     kingCoordinates[1] = startY;
                 }
                 if (isMoveSuccessful && !isKingAttacked) {
+                    System.out.println("x: " + x + "; y: " + y);
                     return true;
                 }
             }
