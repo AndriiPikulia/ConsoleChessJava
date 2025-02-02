@@ -77,7 +77,7 @@ public class ChessController {
     public void moveFigure(char [][] board, char figureSymbol, int presentX, int presentY, int nextX, int nextY) {
         char figureSymbolLowerCase = Character.toLowerCase(figureSymbol);
         Figure figure = model.figures.get(figureSymbolLowerCase);
-
+        System.out.println(figureSymbolLowerCase);
         if (figure == null) {
             return;
         }
@@ -89,10 +89,21 @@ public class ChessController {
         }
 
         boolean isMoveSuccessful = figure.move(presentX, presentY, nextX, nextY);
-        int countKingMoves = model.king.getCountKingMoves();
-        int countRookMoves = model.rook.getCountRookMoves();
 
-        if (figureSymbolLowerCase == 'k' && isMoveSuccessful && countKingMoves == 1 && countRookMoves == 0) {
+        if(!isMoveSuccessful) {
+            return;
+        }
+
+        if(figureSymbolLowerCase != 'k' && figureSymbolLowerCase != 'p' && figureSymbol != 'P') {
+            return;
+        }
+
+        int countKingMoves = King.getCountKingMoves();
+        int countRookMoves = Rook.getCountRookMoves();
+        System.out.println("countKingMoves" + countKingMoves);
+        System.out.println("countRookMoves" + countRookMoves);
+
+        if (figureSymbolLowerCase == 'k' /*&& countKingMoves == 2 && countRookMoves == 0*/) {
             boolean isRogueKingMoveRight = (nextX == presentX + 2);
             boolean isRogueKingMoveLeft = (nextX == presentX - 2);
 
@@ -109,6 +120,15 @@ public class ChessController {
                 board[presentY][7] = '.';
                 updateKingCoordinates(figure, nextX, nextY);
             }
+
+            else {
+                System.out.println("Походили королем на 1 клітинку");
+                updateKingCoordinates(figure, nextX, nextY);
+            }
+
+            if (checkIsCheckmate(!figure.checkIsFigureWhite(nextX, nextY))) {
+                System.out.println("Checkmate");
+            }
         }
 
         else if(figureSymbolLowerCase == 'P' || figureSymbolLowerCase == 'p') {
@@ -116,19 +136,6 @@ public class ChessController {
             model.pawn.promotion(nextX, nextY, model.getFigures(), scanner);
             model.pawn.beat(presentX, presentY, nextX, nextY);
             model.pawn.enPassant(presentX, presentY, nextX, nextY);
-        }
-
-        else if(figureSymbolLowerCase == 'k' && isMoveSuccessful){
-            System.out.println("Походили королем на 1 клітинку");
-            updateKingCoordinates(figure, nextX, nextY);
-        }
-
-        else {
-            System.out.println("Походили іншою фігурою");
-        }
-        if (checkIsCheckmate(!figure.checkIsFigureWhite(nextX, nextY))) {
-            System.out.println("Checkmate");
-            System.exit(0);
         }
     }
 

@@ -4,7 +4,7 @@ public class Rook extends Figure {
         super.board = board;
     }
 
-    private int countRookMoves;
+    private static int countRookMoves;
 
 
     @Override
@@ -21,14 +21,14 @@ public class Rook extends Figure {
             board[nextY][nextX] = board[presentY][presentX];
             board[presentY][presentX] = '.';
             System.out.println("Походили турою");
-            this.countRookMoves++;
+            countRookMoves++;
             return true;
         }
 
         return false;
     }
 
-    public int getCountRookMoves() {
+    public static int getCountRookMoves() {
         return countRookMoves;
     }
 
