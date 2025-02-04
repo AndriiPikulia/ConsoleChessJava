@@ -14,22 +14,22 @@ public class ChessController {
         this.view = view;
     }
 
-    public void updateView(){
+    public void updateView() {
         view.printBoard(model.board);
     }
 
     public void fillBoardPositions(HashMap<Character, Integer> boardPositions) {
-        boardPositions.put('a',1);
-        boardPositions.put('b',2);
-        boardPositions.put('c',3);
-        boardPositions.put('d',4);
-        boardPositions.put('e',5);
-        boardPositions.put('f',6);
-        boardPositions.put('g',7);
-        boardPositions.put('h',8);
+        boardPositions.put('a', 1);
+        boardPositions.put('b', 2);
+        boardPositions.put('c', 3);
+        boardPositions.put('d', 4);
+        boardPositions.put('e', 5);
+        boardPositions.put('f', 6);
+        boardPositions.put('g', 7);
+        boardPositions.put('h', 8);
     }
 
-    public void inputCoordinates(Scanner scanner) {
+    public void inputCoordinates(Scanner scanner, char[][] board, HashMap<Character, Integer> boardPositions) {
         System.out.println("Введіть координати фігури якою зочете зробити хід");
         String presentCellCoordinates = scanner.nextLine();
 
@@ -38,46 +38,71 @@ public class ChessController {
 
         model.setPresentCellCoordinates(presentCellCoordinates);
         model.setNextCellCoordinates(nextCellCoordinates);
+
+        int nextLetterKeyToNumber = 0;
+        int presentLetterKeyToNumber = 0;
+
+        char presentLetterCoordinate = getLetterCoordinate(model.getPresentCellCoordinates());
+        int presentNumberCoordinate = (getNumberCoordinate(model.getPresentCellCoordinates())) - 1;
+
+        char nextLetterCoordinate = getLetterCoordinate(model.getNextCellCoordinates());
+        int nextNumberCoordinate = (getNumberCoordinate(model.getNextCellCoordinates())) - 1;
+
+        for (Map.Entry<Character, Integer> entry : boardPositions.entrySet()) {
+            if (entry.getKey() == presentLetterCoordinate) {
+                presentLetterKeyToNumber = entry.getValue() - 1;
+            }
+        }
+        for (Map.Entry<Character, Integer> entry : boardPositions.entrySet()) {
+            if (entry.getKey() == nextLetterCoordinate) {
+                nextLetterKeyToNumber = entry.getValue() - 1;
+            }
+        }
+
+        char figureSymbol = board[presentNumberCoordinate][presentLetterKeyToNumber];
+
+        if (moveValidation(model.moveCount, board, presentLetterKeyToNumber, presentNumberCoordinate)) {
+            moveFigure(board, figureSymbol, presentLetterKeyToNumber, presentNumberCoordinate, nextLetterKeyToNumber, nextNumberCoordinate);
+            model.moveCount++;
+        }
+    }
+
+    public boolean moveValidation(int moveCount, char[][] board, int presentX, int presentY) {
+        if ((moveCount % 2) != 0) {
+            if (Character.isLowerCase(board[presentY][presentX])) {
+                System.out.println("Це фігура команди чорних! Хід зробити неможливо");
+                return false;
+            }
+            if (board[presentY][presentX] == '.') {
+                System.out.println("Це пуста клітинка! Хід зробити неможливо");
+                return false;
+            }
+        }
+        if ((moveCount % 2) == 0) {
+            if (Character.isUpperCase(board[presentY][presentX])) {
+                System.out.println("Це фігура команди білих! Хід зробити неможливо");
+                return false;
+            }
+            if (board[presentY][presentX] == '.') {
+                System.out.println("Це пуста клітинка! Хід зробити неможливо");
+                return false;
+            }
+        }
+        return true;
     }
 
     public char getLetterCoordinate(String presentCellCoordinates) {
         return presentCellCoordinates.charAt(0);
     }
+
     public int getNumberCoordinate(String presentCellCoordinates) {
         return Integer.parseInt(presentCellCoordinates.substring(1));
     }
 
-    public char[][] swapFiguresOnBoard(char[][] board, HashMap<Character, Integer> boardPositions) {
-        int nextLetterKeyToNumber = 0;
-        int presentLetterKeyToNumber = 0;
-
-        char presentLetterCoordinate = getLetterCoordinate(model.getPresentCellCoordinates());
-        int presentNumberCoordinate = (getNumberCoordinate(model.getPresentCellCoordinates()))-1;
-
-        char nextLetterCoordinate = getLetterCoordinate(model.getNextCellCoordinates());
-        int nextNumberCoordinate = (getNumberCoordinate(model.getNextCellCoordinates()))-1;
-
-        for(Map.Entry<Character, Integer> entry : boardPositions.entrySet()) {
-            if(entry.getKey() == presentLetterCoordinate) {
-                presentLetterKeyToNumber = entry.getValue()-1;
-            }
-        }
-        for(Map.Entry<Character, Integer> entry : boardPositions.entrySet()) {
-            if(entry.getKey() == nextLetterCoordinate) {
-                nextLetterKeyToNumber = entry.getValue()-1;
-            }
-        }
-
-        char figureSymbol = board[presentNumberCoordinate][presentLetterKeyToNumber];
-        moveFigure(board, figureSymbol, presentLetterKeyToNumber, presentNumberCoordinate, nextLetterKeyToNumber, nextNumberCoordinate);
-
-        return board;
-    }
-
-    public void moveFigure(char [][] board, char figureSymbol, int presentX, int presentY, int nextX, int nextY) {
+    public void moveFigure(char[][] board, char figureSymbol, int presentX, int presentY, int nextX, int nextY) {
         char figureSymbolLowerCase = Character.toLowerCase(figureSymbol);
         Figure figure = model.figures.get(figureSymbolLowerCase);
-        System.out.println(figureSymbolLowerCase);
+
         if (figure == null) {
             return;
         }
@@ -90,7 +115,7 @@ public class ChessController {
 
         figure.move(presentX, presentY, nextX, nextY);
 
-        if(figureSymbolLowerCase != 'k' && figureSymbol != 'K' && figureSymbolLowerCase != 'p' && figureSymbol != 'P') {
+        if (figureSymbolLowerCase != 'k' && figureSymbol != 'K' && figureSymbolLowerCase != 'p' && figureSymbol != 'P') {
             return;
         }
 
@@ -107,30 +132,24 @@ public class ChessController {
             boolean isRightRookGoingToMove = (!isRightBlackRookMoves && presentY == 7) || (!isRightWhiteRookMoves && presentY == 0);
 
             if (isRogueKingMoveLeft && ((!isLeftBlackRookMoves && presentY == 7) || (!isLeftWhiteRookMoves && presentY == 0))) {
-                board[nextY][nextX+1] = board[presentY][0];
+                board[nextY][nextX + 1] = board[presentY][0];
                 board[presentY][0] = '.';
                 updateKingCoordinates(figure, nextX, nextY);
-            }
-
-            else if (isRogueKingMoveRight && ((!isRightBlackRookMoves && presentY == 7) || (!isRightWhiteRookMoves && presentY == 0))) {
-                board[nextY][nextX-1] = board[presentY][7];
+            } else if (isRogueKingMoveRight && ((!isRightBlackRookMoves && presentY == 7) || (!isRightWhiteRookMoves && presentY == 0))) {
+                board[nextY][nextX - 1] = board[presentY][7];
                 board[presentY][7] = '.';
                 updateKingCoordinates(figure, nextX, nextY);
-            }
-            else if(!isLeftRookGoingToMove && isRogueKingMoveLeft || !isRightRookGoingToMove && isRogueKingMoveRight) {
+            } else if (!isLeftRookGoingToMove && isRogueKingMoveLeft || !isRightRookGoingToMove && isRogueKingMoveRight) {
                 board[presentY][presentX] = board[nextY][nextX];
                 board[nextY][nextX] = '.';
-            }
-            else {
+            } else {
                 updateKingCoordinates(figure, nextX, nextY);
             }
 
             if (checkIsCheckmate(!figure.checkIsFigureWhite(nextX, nextY))) {
                 System.out.println("Мат!");
             }
-        }
-
-        else if(figureSymbolLowerCase == 'p') {
+        } else if (figureSymbolLowerCase == 'p') {
             model.pawn.promotion(nextX, nextY, model.getFigures(), scanner);
             model.pawn.beat(presentX, presentY, nextX, nextY);
             model.pawn.enPassant(presentX, presentY, nextX, nextY);
@@ -147,7 +166,7 @@ public class ChessController {
         model.board[startY][startX] = '.';
         model.board[endY][endX] = startFigure;
         if (Character.toLowerCase(startFigure) == 'k') {
-            kingCoordinates = new int[] {endX, endY};
+            kingCoordinates = new int[]{endX, endY};
         }
 
         canBeKingAttackedAfterMove = checkIsKingAttacked(isStartFigureWhite, kingCoordinates);
@@ -161,7 +180,7 @@ public class ChessController {
         boolean isAttacked = false;
 
         outer:
-        for(int x = 0; x < model.board.length; x++) {
+        for (int x = 0; x < model.board.length; x++) {
             for (int y = 0; y < model.board[0].length; y++) {
                 char figureChar = model.board[y][x];
                 char figureCharLowerCase = Character.toLowerCase(figureChar);
@@ -175,7 +194,7 @@ public class ChessController {
                     isAttacked = model.figures.get(figureCharLowerCase).checkCanAttackField(x, y, kingCoordinates[0], kingCoordinates[1]);
                 }
 
-                if(isAttacked) {
+                if (isAttacked) {
                     break outer;
                 }
             }
@@ -188,10 +207,10 @@ public class ChessController {
         boolean isKingWhite = figure.checkIsFigureWhite(newX, newY);
 
         if (isKingWhite) {
-            model.whiteKingCoordinates = new int[] {newX, newY};
+            model.whiteKingCoordinates = new int[]{newX, newY};
         }
         if (!isKingWhite) {
-            model.blackKingCoordinates = new int[] {newX, newY};
+            model.blackKingCoordinates = new int[]{newX, newY};
         }
     }
 

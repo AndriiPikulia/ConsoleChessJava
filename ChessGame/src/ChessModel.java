@@ -3,6 +3,7 @@ import java.util.HashMap;
 public class ChessModel {
     String presentCellCoordinates;
     String nextCellCoordinates;
+    int moveCount = 1;
     int[] whiteKingCoordinates;
     int[] blackKingCoordinates;
     HashMap<Character, Figure> figures;
@@ -24,8 +25,8 @@ public class ChessModel {
         this.queen = new Queen(board);
         this.king = new King(board, rook);
 
-        whiteKingCoordinates = new int[] {4, 0};
-        blackKingCoordinates = new int[] {4, 7};
+        whiteKingCoordinates = new int[]{4, 0};
+        blackKingCoordinates = new int[]{4, 7};
 
         figures.put('n', knight);
         figures.put('p', pawn);
@@ -35,10 +36,9 @@ public class ChessModel {
         figures.put('k', king);
     }
 
-    public HashMap<Character,Figure> getFigures() {
+    public HashMap<Character, Figure> getFigures() {
         return figures;
     }
-
 
     public String getPresentCellCoordinates() {
         return presentCellCoordinates;
@@ -56,12 +56,12 @@ public class ChessModel {
         this.nextCellCoordinates = nextCellCoordinates;
     }
 
-    char[][] board = {{'R','N','B','Q','K','B','N','R'},
-            {'P','P','P','P','P','P','P','P'},
-            {'.','.','.','.','.','.','.','.'},
-            {'.','.','.','.','.','.','.','.'},
-            {'.','.','.','.','.','.','.','.'},
-            {'.','Q','.','Q','.','.','.','.'},
-            {'p','p','p','p','p','p','p','p'},
-            {'r','.','.','.','k','.','.','r'}};
+    char[][] board = {{'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'},
+            {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
+            {'.', '.', '.', '.', '.', '.', '.', '.'},
+            {'.', '.', '.', '.', '.', '.', '.', '.'},
+            {'.', '.', '.', '.', '.', '.', '.', '.'},
+            {'.', '.', '.', '.', '.', '.', '.', '.'},
+            {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
+            {'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'}};
 }
