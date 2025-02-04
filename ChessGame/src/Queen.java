@@ -8,7 +8,7 @@ public class Queen extends Figure {
         boolean isPossibleMove = (Math.abs(nextX - presentX) == Math.abs(nextY - presentY)
                 || (presentX - nextX == 0 || presentY - nextY == 0));
 
-        boolean isBlockedByOtherFigures = checkIsFigureInLine(presentX, presentY, nextX, nextY);
+        boolean isBlockedByOtherFigures = checkIsFigureBetweenFields(presentX, presentY, nextX, nextY);
 
         if (isPossibleMove && !isBlockedByOtherFigures) {
             board[nextY][nextX] = board[presentY][presentX];

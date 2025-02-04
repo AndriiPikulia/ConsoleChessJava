@@ -16,7 +16,7 @@ public class Pawn extends Figure {
     boolean isWhitePawnStart = (pawn == 'P' && presentY == 1);
     boolean isBlackPawnStart = (pawn == 'p' && presentY == 6);
 
-    boolean isBlockedByOtherFigures = checkIsFigureInLine(presentX, presentY, nextX, nextY);
+    boolean isBlockedByOtherFigures = checkIsFigureBetweenFields(presentX, presentY, nextX, nextY);
 
     boolean isPossibleMovePawnWhite = (presentX == nextX && yLength == 1 &&
             presentY < nextY && board[nextY][nextX] == '.'

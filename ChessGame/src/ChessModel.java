@@ -22,7 +22,7 @@ public class ChessModel {
         this.figures = new HashMap<>();
         this.bishop = new Bishop(board);
         this.queen = new Queen(board);
-        this.king = new King(board);
+        this.king = new King(board, rook, figures);
 
         whiteKingCoordinates = new int[] {4, 0};
         blackKingCoordinates = new int[] {4, 7};
@@ -58,10 +58,10 @@ public class ChessModel {
 
     char[][] board = {{'R','N','B','Q','K','B','N','R'},
             {'P','P','P','P','P','P','P','P'},
+            {'.','.','.','R','.','.','.','.'},
+            {'.','.','.','.','.','R','.','.'},
             {'.','.','.','.','.','.','.','.'},
-            {'.','.','.','.','.','.','.','.'},
-            {'.','.','.','.','.','.','.','.'},
-            {'.','.','.','.','.','.','.','.'},
-            {'p','p','p','p','p','p','p','p'},
-            {'r','n','b','q','k','b','n','r'}};
+            {'.','.','.','R','.','.','.','.'},
+            {'p','p','p','.','.','.','p','p'},
+            {'r','.','.','.','k','.','.','r'}};
 }

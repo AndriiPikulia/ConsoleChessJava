@@ -89,7 +89,6 @@ public class ChessController {
         }
 
         boolean isMoveSuccessful = figure.move(presentX, presentY, nextX, nextY);
-
         if (figureSymbolLowerCase == 'k' && isMoveSuccessful) {
             updateKingCoordinates(figure, nextX, nextY);
         }
@@ -118,38 +117,11 @@ public class ChessController {
             kingCoordinates = new int[] {endX, endY};
         }
 
-        canBeKingAttackedAfterMove = checkIsKingAttacked(isStartFigureWhite, kingCoordinates);
+        canBeKingAttackedAfterMove = model.king.checkIsFieldAttacked(isStartFigureWhite, kingCoordinates);
 
         model.board[startY][startX] = startFigure;
         model.board[endY][endX] = endFigure;
         return canBeKingAttackedAfterMove;
-    }
-
-    protected boolean checkIsKingAttacked(boolean isKingWhite, int[] kingCoordinates) {
-        boolean isAttacked = false;
-
-        outer:
-        for(int x = 0; x < model.board.length; x++) {
-            for (int y = 0; y < model.board[0].length; y++) {
-                char figureChar = model.board[y][x];
-                char figureCharLowerCase = Character.toLowerCase(figureChar);
-                boolean isFigureWhite = Character.isUpperCase(figureChar);
-
-                if (isFigureWhite == isKingWhite) {
-                    continue;
-                }
-
-                if (figureChar != '.') {
-                    isAttacked = model.figures.get(figureCharLowerCase).checkCanAttackField(x, y, kingCoordinates[0], kingCoordinates[1]);
-                }
-
-                if(isAttacked) {
-                    break outer;
-                }
-            }
-        }
-
-        return isAttacked;
     }
 
     protected void updateKingCoordinates(Figure figure, int newX, int newY) {
@@ -195,7 +167,7 @@ public class ChessController {
                 }
 
                 boolean isMoveSuccessful = figure.imitateMove(startX, startY, x, y);
-                boolean isKingAttacked = checkIsKingAttacked(isWhite, kingCoordinates);
+                boolean isKingAttacked = model.king.checkIsFieldAttacked(isWhite, kingCoordinates);
 
                 if (isMoveSuccessful) {
                     model.board[startY][startX] = model.board[y][x];

@@ -7,7 +7,7 @@ public class Bishop extends Figure{
     protected boolean move(int presentX, int presentY, int nextX, int nextY) {
 
         boolean isPossibleMove = Math.abs(nextX - presentX) == Math.abs(nextY - presentY);
-        boolean isBlockedByOtherFigures = checkIsFigureInLine(presentX, presentY, nextX, nextY);
+        boolean isBlockedByOtherFigures = checkIsFigureBetweenFields(presentX, presentY, nextX, nextY);
 
         if (isPossibleMove && !isBlockedByOtherFigures) {
             board[nextY][nextX] = board[presentY][presentX];
