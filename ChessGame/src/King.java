@@ -24,7 +24,7 @@ public class King extends Figure{
         if ((isPossibleMove) && !isBlockedByOtherFigures) {
             board[nextY][nextX] = board[presentY][presentX];
             board[presentY][presentX] = '.';
-            countKingMoves = countWhiteKingMoves + countBlackKingMoves;
+            //countKingMoves = countWhiteKingMoves + countBlackKingMoves;
             countKingMoves++;
             return true;
         }
@@ -58,17 +58,39 @@ public class King extends Figure{
 
         boolean isBlockedByOtherFigures = checkIsFigureInLine(presentX, presentY, nextX, nextY);
 
+        boolean isLeftBlackRookMoves = Rook.getLeftBlackRook();
+        boolean isRightBlackRookMoves = Rook.getRightBlackRook();
+        boolean isLeftWhiteRookMoves = Rook.getLeftWhiteRook();
+        boolean isRightWhiteRookMoves = Rook.getRightWhiteRook();
+
+        boolean isLeftRookGoingToMove = (!isLeftBlackRookMoves && presentY == 7) || (!isLeftWhiteRookMoves && presentY == 0);
+        boolean isRightRookGoingToMove = (!isRightBlackRookMoves && presentY == 7) || (!isRightWhiteRookMoves && presentY == 0);
+
         if ((isPossibleMove) && !isBlockedByOtherFigures) {
             board[nextY][nextX] = board[presentY][presentX];
             board[presentY][presentX] = '.';
             return true;
         }
 
-        else if(isPossibleMoveForRogue && countKingMoves == 0 && !isBlockedByOtherFigures/* && countLeftBlackRookMoves == 0 || countRightBlackRookMoves == 0 || countLeftWhiteRookMoves == 0 || countRightWhiteRookMoves == 0*/) {
+        else if(isPossibleMoveForRogue && countKingMoves == 0 && (countBlackKingMoves == 0 || countWhiteKingMoves == 0) && !isBlockedByOtherFigures /* && countLeftBlackRookMoves == 0 || countRightBlackRookMoves == 0 || countLeftWhiteRookMoves == 0 || countRightWhiteRookMoves == 0*/) {
             board[nextY][nextX] = board[presentY][presentX];
             board[presentY][presentX] = '.';
+            if(!isLeftBlackRookMoves || !isRightBlackRookMoves && presentY == 7) {
             return true;
-        }
+            }
+            else if (!isLeftWhiteRookMoves || !isRightWhiteRookMoves && presentY == 0) {
+            return true;
+            }
+
+            if(!isLeftRookGoingToMove && nextX == presentX - 2 || !isRightRookGoingToMove && nextX == presentX + 2){
+                if(presentY == 7) {
+                return false;
+                }
+                else if(presentY == 0) {
+                    return false;
+                }
+                }
+            }
 
         return false;
     }
