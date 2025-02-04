@@ -67,5 +67,61 @@ public class ChessMain {
         controller.inputCoordinates(scanner);
         controller.swapFiguresOnBoard(model.board,boardPositions);
         controller.updateView();
+        controller.inputCoordinates(scanner);
+        controller.swapFiguresOnBoard(model.board,boardPositions);
+        controller.updateView();
+        controller.inputCoordinates(scanner);
+        controller.swapFiguresOnBoard(model.board,boardPositions);
+        controller.updateView();
+        controller.inputCoordinates(scanner);
+        controller.swapFiguresOnBoard(model.board,boardPositions);
+        controller.updateView();
+        controller.inputCoordinates(scanner);
+        controller.swapFiguresOnBoard(model.board,boardPositions);
+        controller.updateView();
+        controller.inputCoordinates(scanner);
+        controller.swapFiguresOnBoard(model.board,boardPositions);
+        controller.updateView();
+        controller.inputCoordinates(scanner);
+        controller.swapFiguresOnBoard(model.board,boardPositions);
+        controller.updateView();
+        controller.inputCoordinates(scanner);
+        controller.swapFiguresOnBoard(model.board,boardPositions);
+        controller.updateView();
+        controller.inputCoordinates(scanner);
+        controller.swapFiguresOnBoard(model.board,boardPositions);
+        controller.updateView();
+        controller.inputCoordinates(scanner);
+        controller.swapFiguresOnBoard(model.board,boardPositions);
+        controller.updateView();
+        controller.inputCoordinates(scanner);
+        controller.swapFiguresOnBoard(model.board,boardPositions);
+        controller.updateView();
+        controller.inputCoordinates(scanner);
+        controller.swapFiguresOnBoard(model.board,boardPositions);
+        controller.updateView();
+        controller.inputCoordinates(scanner);
+        controller.swapFiguresOnBoard(model.board,boardPositions);controller.updateView();
+        controller.inputCoordinates(scanner);
+        controller.swapFiguresOnBoard(model.board,boardPositions);controller.updateView();
+        controller.inputCoordinates(scanner);
+        controller.swapFiguresOnBoard(model.board,boardPositions);
+        controller.updateView();
+        controller.inputCoordinates(scanner);
+        controller.swapFiguresOnBoard(model.board,boardPositions);controller.updateView();
+        controller.inputCoordinates(scanner);
+        controller.swapFiguresOnBoard(model.board,boardPositions);controller.updateView();
+        controller.inputCoordinates(scanner);
+        controller.swapFiguresOnBoard(model.board,boardPositions);
+        controller.updateView();
+        controller.inputCoordinates(scanner);
+        controller.swapFiguresOnBoard(model.board,boardPositions);
+        controller.updateView();
+        controller.inputCoordinates(scanner);
+        controller.swapFiguresOnBoard(model.board,boardPositions);
+
+
+
+
     }
 }

@@ -31,7 +31,7 @@ abstract public class Figure {
     protected boolean checkCanAttackField(int figureX, int figureY, int fieldX, int fieldY) {
         char field = board[fieldY][fieldX];
         char figure = board[figureY][figureX];
-        boolean isMoveSuccessful = move(figureX, figureY, fieldX, fieldY);
+        boolean isMoveSuccessful = imitateMove(figureX, figureY, fieldX, fieldY);
 
         if(isMoveSuccessful) {
             board[fieldY][fieldX] = field;

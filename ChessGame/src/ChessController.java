@@ -79,48 +79,63 @@ public class ChessController {
         Figure figure = model.figures.get(figureSymbolLowerCase);
         System.out.println(figureSymbolLowerCase);
         if (figure == null) {
+            System.out.println("12");
             return;
         }
 
         boolean canBeKingAttackedAfterMove = checkCanBeKingAttackedAfterMove(presentX, presentY, nextX, nextY);
 
         if (canBeKingAttackedAfterMove) {
+            System.out.println("123");
             return;
         }
 
         boolean isMoveSuccessful = figure.move(presentX, presentY, nextX, nextY);
 
         if(!isMoveSuccessful) {
+            System.out.println("1");
             return;
         }
 
-        if(figureSymbolLowerCase != 'k' && figureSymbolLowerCase != 'p' && figureSymbol != 'P') {
+        if(figureSymbolLowerCase != 'k' && figureSymbol != 'K' && figureSymbolLowerCase != 'p' && figureSymbol != 'P') {
             return;
         }
 
-        int countKingMoves = King.getCountKingMoves();
+       /* int countKingMoves = King.getCountKingMoves();
         int countRookMoves = Rook.getCountRookMoves();
         System.out.println("countKingMoves" + countKingMoves);
         System.out.println("countRookMoves" + countRookMoves);
-
-        if (figureSymbolLowerCase == 'k' /*&& countKingMoves == 2 && countRookMoves == 0*/) {
+*/
+        if (figureSymbolLowerCase == 'k' || figureSymbol == 'K' /*&& countKingMoves == 2 && countRookMoves == 0*/) {
             boolean isRogueKingMoveRight = (nextX == presentX + 2);
             boolean isRogueKingMoveLeft = (nextX == presentX - 2);
 
-            if (isRogueKingMoveLeft) {
+            boolean countLeftBlackRookMoves = Rook.getLeftBlackRook();
+            boolean countRightBlackRookMoves = Rook.getRightBlackRook();
+            boolean countLeftWhiteRookMoves = Rook.getLeftWhiteRook();
+            boolean countRightWhiteRookMoves = Rook.getRightWhiteRook();
+
+            boolean isLeftRookGoingToMove = (!countLeftBlackRookMoves && presentY == 7) || (!countLeftWhiteRookMoves && presentY == 0);
+            boolean isRightRookGoingToMove = (!countRightBlackRookMoves && presentY == 7) || (!countRightWhiteRookMoves && presentY == 0);
+
+            if (isRogueKingMoveLeft && ((!countLeftBlackRookMoves && presentY == 7) || (!countLeftWhiteRookMoves && presentY == 0))) {
                 System.out.println("Походили королем вліво");
                 board[nextY][nextX+1] = board[presentY][0];
                 board[presentY][0] = '.';
                 updateKingCoordinates(figure, nextX, nextY);
             }
 
-            else if (isRogueKingMoveRight) {
+            else if (isRogueKingMoveRight && ((!countRightBlackRookMoves && presentY == 7) || (!countRightWhiteRookMoves && presentY == 0))) {
                 System.out.println("Походили королем вправо");
                 board[nextY][nextX-1] = board[presentY][7];
                 board[presentY][7] = '.';
                 updateKingCoordinates(figure, nextX, nextY);
             }
-
+            else if(!isLeftRookGoingToMove && isRogueKingMoveLeft || !isRightRookGoingToMove && isRogueKingMoveRight) {
+                System.out.println("222");
+                board[presentY][presentX] = board[nextY][nextX];
+                board[nextY][nextX] = '.';
+            }
             else {
                 System.out.println("Походили королем на 1 клітинку");
                 updateKingCoordinates(figure, nextX, nextY);

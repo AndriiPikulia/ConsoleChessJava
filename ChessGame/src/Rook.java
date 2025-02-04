@@ -4,8 +4,15 @@ public class Rook extends Figure {
         super.board = board;
     }
 
-    private static int countRookMoves;
+    private static int leftBlackRook;
+    private static int rightBlackRook;
+    private static int leftWhiteRook;
+    private static int rightWhiteRook;
 
+    private static boolean isLeftBlackRook;
+    private static boolean isRightBlackRook;
+    private static boolean isLeftWhiteRook;
+    private static boolean isRightWhiteRook;
 
     @Override
     protected boolean move(int presentX, int presentY, int nextX, int nextY) {
@@ -21,15 +28,42 @@ public class Rook extends Figure {
             board[nextY][nextX] = board[presentY][presentX];
             board[presentY][presentX] = '.';
             System.out.println("Походили турою");
-            countRookMoves++;
+            checkWhichRookIsMoving(presentX, presentY);
             return true;
         }
 
         return false;
     }
 
-    public static int getCountRookMoves() {
+    /*public static int getCountRookMoves() {
         return countRookMoves;
+    }*/
+
+    protected static void checkWhichRookIsMoving(int presentX, int presentY) {
+        if(presentX == 0 && presentY == 0 ) {
+            isLeftWhiteRook = true;
+        }
+        if(presentX == 7 && presentY == 0 ) {
+            isRightWhiteRook = true;
+        }
+        if(presentX == 0 && presentY == 7 ) {
+            isLeftBlackRook = true;
+        }
+        if(presentX == 7 && presentY == 7 ) {
+            isRightBlackRook = true;
+        }
+    }
+    protected static boolean getLeftBlackRook() {
+        return isLeftBlackRook;
+    }
+    protected static boolean getRightBlackRook () {
+        return isRightBlackRook;
+    }
+    protected static boolean getLeftWhiteRook() {
+        return isLeftWhiteRook;
+    }
+    protected static boolean getRightWhiteRook() {
+        return isRightWhiteRook;
     }
 
     protected boolean imitateMove(int presentX, int presentY, int nextX, int nextY) {
