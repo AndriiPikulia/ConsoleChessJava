@@ -15,4 +15,8 @@ public class King extends Figure{
 
         return false;
     }
+
+    protected boolean imitateMove(int presentX, int presentY, int nextX, int nextY) {
+        return move(presentX, presentY, nextX, nextY);
+    }
 }

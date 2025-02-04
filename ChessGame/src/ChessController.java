@@ -194,7 +194,7 @@ public class ChessController {
                     kingCoordinates[1] = y;
                 }
 
-                boolean isMoveSuccessful = figure.move(startX, startY, x, y);
+                boolean isMoveSuccessful = figure.imitateMove(startX, startY, x, y);
                 boolean isKingAttacked = checkIsKingAttacked(isWhite, kingCoordinates);
 
                 if (isMoveSuccessful) {
