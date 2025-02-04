@@ -4,11 +4,6 @@ public class Rook extends Figure {
         super.board = board;
     }
 
-    private static int leftBlackRook;
-    private static int rightBlackRook;
-    private static int leftWhiteRook;
-    private static int rightWhiteRook;
-
     private static boolean isLeftBlackRook;
     private static boolean isRightBlackRook;
     private static boolean isLeftWhiteRook;
@@ -27,17 +22,12 @@ public class Rook extends Figure {
         if ((isPossibleMoveOy || isPossibleMoveOx) && !isBlockedByOtherFigures) {
             board[nextY][nextX] = board[presentY][presentX];
             board[presentY][presentX] = '.';
-            System.out.println("Походили турою");
             checkWhichRookIsMoving(presentX, presentY);
             return true;
         }
 
         return false;
     }
-
-    /*public static int getCountRookMoves() {
-        return countRookMoves;
-    }*/
 
     protected static void checkWhichRookIsMoving(int presentX, int presentY) {
         if(presentX == 0 && presentY == 0 ) {
