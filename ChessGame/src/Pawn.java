@@ -3,8 +3,11 @@ import java.util.Scanner;
 
 public class Pawn extends Figure {
 
-    public Pawn(char[][] board) {
+    private final HashMap<Character,Figure> figures;
+
+    public Pawn(char[][] board, HashMap<Character, Figure> figures) {
         super.board = board;
+        this.figures = figures;
     }
 
     private boolean pawnDoubleMove = false;
@@ -81,7 +84,23 @@ public class Pawn extends Figure {
         }
     }
 
-    protected boolean enPassant(int presentX, int presentY, int nextX, int nextY) {
+    protected void enPassantMove(int presentX, int presentY, int nextX, int nextY) {
+        if (checkEnPassant(presentX, presentY, nextX, nextY)) {
+            board[nextY][nextX] = board[presentY][presentX];
+            board[presentY][presentX] = '.';
+
+            if (nextX - presentX == 1) {
+                board[presentY][presentX + 1] = '.';
+                pawnDoubleMove = false;
+            }
+            if (nextX - presentX == -1) {
+                board[presentY][presentX - 1] = '.';
+                pawnDoubleMove = false;
+            }
+        }
+    }
+
+    protected boolean checkEnPassant(int presentX, int presentY, int nextX, int nextY) {
         if (!pawnDoubleMove){
             return false;
         }
@@ -99,22 +118,7 @@ public class Pawn extends Figure {
                 && Math.abs(nextX - presentX) == 1
                 && (board[presentY][presentX + 1] == 'P' || board[presentY][presentX - 1] == 'P')
                 && pawnDoubleMove;
-
-        if (canWhiteEnPassant || canBlackEnPassant) {
-            board[nextY][nextX] = board[presentY][presentX];
-            board[presentY][presentX] = '.';
-
-            if (nextX - presentX == 1) {
-                board[presentY][presentX + 1] = '.';
-                pawnDoubleMove = false;
-            }
-            if (nextX - presentX == -1) {
-                board[presentY][presentX - 1] = '.';
-                pawnDoubleMove = false;
-            }
-            return true;
-        }
-        return false;
+        return canWhiteEnPassant || canBlackEnPassant;
     }
 
     @Override

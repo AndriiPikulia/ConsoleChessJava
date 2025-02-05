@@ -18,7 +18,7 @@ public class ChessModel {
         this.figures = new HashMap<>();
 
         this.knight = new Knight(board);
-        this.pawn = new Pawn(board);
+        this.pawn = new Pawn(board, figures);
         this.rook = new Rook(board);
         this.figures = new HashMap<>();
         this.bishop = new Bishop(board);
@@ -57,12 +57,12 @@ public class ChessModel {
         this.nextCellCoordinates = nextCellCoordinates;
     }
 
-    char[][] board = {{'R','N','B','Q','K','B','N','R'},
-            {'P','P','P','P','P','P','P','P'},
+    char[][] board = {{'.','N','B','Q','K','B','N','R'},
+            {'p','P','P','P','P','P','P','P'},
             {'.','.','.','.','.','.','.','.'},
             {'.','.','.','.','.','.','.','.'},
             {'.','.','.','.','.','.','.','.'},
             {'.','.','.','.','.','.','.','.'},
-            {'p','p','p','p','p','p','p','p'},
-            {'r','n','b','q','k','b','n','r'}};
+            {'P','p','p','p','p','p','p','p'},
+            {'.','n','b','q','k','b','n','r'}};
 }

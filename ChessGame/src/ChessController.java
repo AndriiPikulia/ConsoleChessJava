@@ -8,6 +8,7 @@ public class ChessController {
     private final ChessView view;
 
     Scanner scanner = new Scanner(System.in);
+    private final HashMap<String, Integer> positionHistory = new HashMap<>();
 
     public ChessController(ChessModel model, ChessView view) {
         this.model = model;
@@ -120,12 +121,27 @@ public class ChessController {
         if(figureSymbolLowerCase == 'P' || figureSymbolLowerCase == 'p') {
             model.pawn.promotion(nextX, nextY, model.getFigures(), scanner);
             model.pawn.beat(presentX, presentY, nextX, nextY);
-            model.pawn.enPassant(presentX, presentY, nextX, nextY);
+            model.pawn.enPassantMove(presentX, presentY, nextX, nextY);
+        }
+
+        updatePositionHistory();
+        if (isThreefoldRepetition()) {
+            System.out.println("Гра закінчена нічиєю через трьохразове повторення позиції!");
+            System.exit(0);
         }
 
         if (checkIsGameOver(!figure.checkIsFigureWhite(nextX, nextY))) {
             System.exit(0);
         }
+    }
+
+    private void updatePositionHistory() {
+        String state = Arrays.deepToString(model.board);
+        positionHistory.put(state, positionHistory.getOrDefault(state, 0) + 1);
+    }
+
+    public boolean isThreefoldRepetition() {
+        return positionHistory.getOrDefault(Arrays.deepToString(model.board), 0) >= 3;
     }
 
     public boolean checkCanBeKingAttackedAfterMove(int startX, int startY, int endX, int endY) {
