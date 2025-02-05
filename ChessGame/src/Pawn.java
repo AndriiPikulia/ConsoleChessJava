@@ -3,11 +3,11 @@ import java.util.Scanner;
 
 public class Pawn extends Figure {
 
-    private final HashMap<Character,Figure> figures;
+//    private final HashMap<Character,Figure> figures;
 
     public Pawn(char[][] board, HashMap<Character, Figure> figures) {
         super.board = board;
-        this.figures = figures;
+//        this.figures = figures;
     }
 
     private boolean pawnDoubleMove = false;
