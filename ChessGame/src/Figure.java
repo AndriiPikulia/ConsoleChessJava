@@ -4,7 +4,7 @@ abstract public class Figure {
     abstract protected boolean move(int presentX, int presentY, int nextX, int nextY);
     abstract protected boolean imitateMove(int presentX, int presentY, int nextX, int nextY);
 
-    protected boolean checkIsFigureInLine(int startX, int startY, int endX, int endY) {
+    protected boolean checkIsFigureBetweenFields(int startX, int startY, int endX, int endY) {
         int indexIAddition = endX - startX > 0 ? 1 : -1;
         int indexJAddition = endY - startY > 0 ? 1 : -1;
         int i = startX;
