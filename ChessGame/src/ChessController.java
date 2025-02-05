@@ -98,8 +98,7 @@ public class ChessController {
             model.pawn.enPassant(presentX, presentY, nextX, nextY);
         }
 
-        if (checkIsCheckmate(!figure.checkIsFigureWhite(nextX, nextY))) {
-            System.out.println("Checkmate");
+        if (checkIsGameOver(!figure.checkIsFigureWhite(nextX, nextY))) {
             System.exit(0);
         }
     }
@@ -135,8 +134,29 @@ public class ChessController {
         }
     }
 
+    protected boolean checkIsGameOver(boolean isCheckForWhite) {
+        boolean isCheckmate = checkIsCheckmate(isCheckForWhite);
+        boolean isStalemate = checkIsStalemate(isCheckForWhite);
+
+        if (isCheckmate) {
+            System.out.println("Мат!");
+            return true;
+        }
+
+        if (isStalemate) {
+            System.out.println("Пат");
+            return true;
+        }
+
+        return false;
+    }
+
     protected boolean checkIsCheckmate(boolean isCheckForWhite) {
         int[] kingCoordinates = isCheckForWhite ? model.whiteKingCoordinates : model.blackKingCoordinates;
+
+        if (!model.king.checkIsFieldAttacked(isCheckForWhite, kingCoordinates)) {
+            return false;
+        }
 
         for (int x = 0; x < model.board.length; x++) {
             for (int y = 0; y < model.board[0].length; y++) {
@@ -154,6 +174,31 @@ public class ChessController {
         return true;
     }
 
+    protected boolean checkIsStalemate(boolean isCheckForWhite) {
+        int[] kingCoordinates = isCheckForWhite ? model.whiteKingCoordinates : model.blackKingCoordinates;
+
+        if (model.king.checkIsFieldAttacked(isCheckForWhite, kingCoordinates)) {
+            return false;
+        }
+
+        for (int x = 0; x < model.board.length; x++) {
+            for (int y = 0; y < model.board[0].length; y++) {
+                boolean isWhite = Character.isUpperCase(model.board[y][x]);
+                if (isWhite != isCheckForWhite || model.board[y][x] == '.') {
+                    continue;
+                }
+
+                if (checkCanFigureAvoidCheckmate(x, y, isCheckForWhite, kingCoordinates)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+
+
     protected boolean checkCanFigureAvoidCheckmate(int startX, int startY, boolean isWhite, int[] kingCoordinates) {
         Figure figure = model.figures.get(Character.toLowerCase(model.board[startY][startX]));
 
@@ -161,6 +206,9 @@ public class ChessController {
             for (int y = 0; y < model.board[0].length; y++) {
                 char attackedField = model.board[y][x];
 
+                if (startX == x && startY == y) {
+                    continue;
+                }
                 if (Character.toLowerCase(model.board[startY][startX]) == 'k') {
                     kingCoordinates[0] = x;
                     kingCoordinates[1] = y;
