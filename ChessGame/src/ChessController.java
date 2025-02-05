@@ -29,7 +29,7 @@ public class ChessController {
         boardPositions.put('h',8);
     }
 
-    public void inputCoordinates(Scanner scanner) {
+    public void inputCoordinates(Scanner scanner, char[][] board, HashMap<Character, Integer> boardPositions) {
         System.out.println("Введіть координати фігури якою зочете зробити хід");
         String presentCellCoordinates = scanner.nextLine();
 
@@ -38,40 +38,65 @@ public class ChessController {
 
         model.setPresentCellCoordinates(presentCellCoordinates);
         model.setNextCellCoordinates(nextCellCoordinates);
+
+        int nextLetterKeyToNumber = 0;
+        int presentLetterKeyToNumber = 0;
+
+        char presentLetterCoordinate = getLetterCoordinate(model.getPresentCellCoordinates());
+        int presentNumberCoordinate = (getNumberCoordinate(model.getPresentCellCoordinates())) - 1;
+
+        char nextLetterCoordinate = getLetterCoordinate(model.getNextCellCoordinates());
+        int nextNumberCoordinate = (getNumberCoordinate(model.getNextCellCoordinates())) - 1;
+
+        for (Map.Entry<Character, Integer> entry : boardPositions.entrySet()) {
+            if (entry.getKey() == presentLetterCoordinate) {
+                presentLetterKeyToNumber = entry.getValue() - 1;
+            }
+        }
+        for (Map.Entry<Character, Integer> entry : boardPositions.entrySet()) {
+            if (entry.getKey() == nextLetterCoordinate) {
+                nextLetterKeyToNumber = entry.getValue() - 1;
+            }
+        }
+
+        char figureSymbol = board[presentNumberCoordinate][presentLetterKeyToNumber];
+
+        if (moveValidation(model.moveCount, board, presentLetterKeyToNumber, presentNumberCoordinate)) {
+            moveFigure(figureSymbol, presentLetterKeyToNumber, presentNumberCoordinate, nextLetterKeyToNumber, nextNumberCoordinate);
+            model.moveCount++;
+        }
     }
+
+    public boolean moveValidation(int moveCount, char[][] board, int presentX, int presentY) {
+        if ((moveCount % 2) != 0) {
+            if (Character.isLowerCase(board[presentY][presentX])) {
+                System.out.println("Це фігура команди чорних! Хід зробити неможливо");
+                return false;
+            }
+            if (board[presentY][presentX] == '.') {
+                System.out.println("Це пуста клітинка! Хід зробити неможливо");
+                return false;
+            }
+        }
+        if ((moveCount % 2) == 0) {
+            if (Character.isUpperCase(board[presentY][presentX])) {
+                System.out.println("Це фігура команди білих! Хід зробити неможливо");
+                return false;
+            }
+            if (board[presentY][presentX] == '.') {
+                System.out.println("Це пуста клітинка! Хід зробити неможливо");
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     public char getLetterCoordinate(String presentCellCoordinates) {
         return presentCellCoordinates.charAt(0);
     }
     public int getNumberCoordinate(String presentCellCoordinates) {
         return Integer.parseInt(presentCellCoordinates.substring(1));
-    }
-
-    public char[][] swapFiguresOnBoard(char[][] board, HashMap<Character, Integer> boardPositions) {
-        int nextLetterKeyToNumber = 0;
-        int presentLetterKeyToNumber = 0;
-
-        char presentLetterCoordinate = getLetterCoordinate(model.getPresentCellCoordinates());
-        int presentNumberCoordinate = (getNumberCoordinate(model.getPresentCellCoordinates()))-1;
-
-        char nextLetterCoordinate = getLetterCoordinate(model.getNextCellCoordinates());
-        int nextNumberCoordinate = (getNumberCoordinate(model.getNextCellCoordinates()))-1;
-
-        for(Map.Entry<Character, Integer> entry : boardPositions.entrySet()) {
-            if(entry.getKey() == presentLetterCoordinate) {
-                presentLetterKeyToNumber = entry.getValue()-1;
-            }
-        }
-        for(Map.Entry<Character, Integer> entry : boardPositions.entrySet()) {
-            if(entry.getKey() == nextLetterCoordinate) {
-                nextLetterKeyToNumber = entry.getValue()-1;
-            }
-        }
-
-        char figureSymbol = board[presentNumberCoordinate][presentLetterKeyToNumber];
-        moveFigure(figureSymbol, presentLetterKeyToNumber, presentNumberCoordinate, nextLetterKeyToNumber, nextNumberCoordinate);
-
-        return board;
     }
 
     public void moveFigure(char figureSymbol, int presentX, int presentY, int nextX, int nextY) {
