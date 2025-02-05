@@ -118,10 +118,8 @@ public class ChessController {
         if (figureSymbolLowerCase == 'k' && isMoveSuccessful) {
             updateKingCoordinates(figure, nextX, nextY);
         }
-        if(figureSymbolLowerCase == 'P' || figureSymbolLowerCase == 'p') {
+        if(figureSymbolLowerCase == 'p') {
             model.pawn.promotion(nextX, nextY, model.getFigures(), scanner);
-            model.pawn.beat(presentX, presentY, nextX, nextY);
-            model.pawn.enPassantMove(presentX, presentY, nextX, nextY);
         }
 
         updatePositionHistory();
@@ -180,16 +178,16 @@ public class ChessController {
         boolean isStalemate = checkIsStalemate(isCheckForWhite);
 
         if (isCheckmate) {
+            model.isGameOver = true;
             System.out.println("Мат!");
-            return true;
         }
 
         if (isStalemate) {
+            model.isGameOver = true;
             System.out.println("Пат");
-            return true;
         }
 
-        return false;
+         return false;
     }
 
     protected boolean checkIsCheckmate(boolean isCheckForWhite) {
