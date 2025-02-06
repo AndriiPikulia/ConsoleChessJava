@@ -17,7 +17,7 @@ public class King extends Figure {
         boolean isSuccessfulImitate = imitateMove(presentX, presentY, nextX, nextY);
         boolean isCastingSuccessful = castling(presentX, presentY, nextX, nextY);
 
-        if (!isSuccessfulImitate && !isCastingSuccessful || checkIsFigureTheSameTeam(presentX, presentY, nextX, nextY)) {
+        if (!isSuccessfulImitate && !isCastingSuccessful) {
             return false;
         }
 

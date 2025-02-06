@@ -37,12 +37,13 @@ abstract public class Figure {
    protected boolean checkIsFigureTheSameTeam(int presentX, int presentY, int nextX, int nextY) {
         boolean checkIsTwoFigureWhite = checkIsFigureWhite(presentX, presentY) == checkIsFigureWhite(nextX, nextY);
         boolean checkIsTwoFigureBlack = checkIsFigureBlack(presentX, presentY) == checkIsFigureBlack(nextX, nextY);
-        if(checkIsTwoFigureWhite || checkIsTwoFigureBlack) {
+        if(board[presentY][presentX] == '.' || board[nextY][nextX] == '.') {
+           return false;
+       }
+        else if(checkIsTwoFigureWhite || checkIsTwoFigureBlack) {
             return true;
         }
-        else{
-            return false;
-        }
+        return false;
     }
 
     protected boolean checkCanAttackField(int figureX, int figureY, int fieldX, int fieldY) {

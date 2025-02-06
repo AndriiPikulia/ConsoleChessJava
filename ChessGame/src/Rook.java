@@ -44,7 +44,7 @@ public class Rook extends Figure {
     protected boolean move(int presentX, int presentY, int nextX, int nextY) {
         boolean isSuccessfulImitate = imitateMove(presentX, presentY, nextX, nextY);
 
-        if (!isSuccessfulImitate || checkIsFigureTheSameTeam(presentX, presentY, nextX, nextY)) {
+        if (!isSuccessfulImitate) {
             return false;
         }
 
@@ -72,6 +72,7 @@ public class Rook extends Figure {
         boolean isBlockedByOtherFigures = checkIsFigureBetweenFields(presentX, presentY, nextX, nextY);
 
         if (isPossibleMove && !isBlockedByOtherFigures) {
+            checkIsFigureTheSameTeam(presentX, presentY, nextX, nextY);
             board[nextY][nextX] = board[presentY][presentX];
             board[presentY][presentX] = '.';
             return true;
