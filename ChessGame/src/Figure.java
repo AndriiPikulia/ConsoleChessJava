@@ -30,6 +30,21 @@ abstract public class Figure {
         return Character.isUpperCase(board[y][x]);
     }
 
+    protected boolean checkIsFigureBlack(int x, int y) {
+        return Character.isLowerCase(board[y][x]);
+    }
+
+   protected boolean checkIsFigureTheSameTeam(int presentX, int presentY, int nextX, int nextY) {
+        boolean checkIsTwoFigureWhite = checkIsFigureWhite(presentX, presentY) == checkIsFigureWhite(nextX, nextY);
+        boolean checkIsTwoFigureBlack = checkIsFigureBlack(presentX, presentY) == checkIsFigureBlack(nextX, nextY);
+        if(checkIsTwoFigureWhite || checkIsTwoFigureBlack) {
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
     protected boolean checkCanAttackField(int figureX, int figureY, int fieldX, int fieldY) {
         char field = board[fieldY][fieldX];
         char figure = board[figureY][figureX];

@@ -10,7 +10,7 @@ public class Queen extends Figure {
 
         boolean isBlockedByOtherFigures = checkIsFigureBetweenFields(presentX, presentY, nextX, nextY);
 
-        if (isPossibleMove && !isBlockedByOtherFigures) {
+        if (isPossibleMove && !isBlockedByOtherFigures && !checkIsFigureTheSameTeam(presentX, presentY, nextX, nextY)) {
             board[nextY][nextX] = board[presentY][presentX];
             board[presentY][presentX] = '.';
             return true;

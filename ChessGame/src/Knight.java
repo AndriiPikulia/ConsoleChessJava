@@ -11,7 +11,7 @@ public class Knight extends Figure {
         boolean isPossibleMove = xDifference == 1 && yDifference == 2
                 || xDifference == 2 && yDifference == 1;
 
-        if (isPossibleMove) {
+        if (isPossibleMove && !checkIsFigureTheSameTeam(presentX, presentY, nextX, nextY)) {
             board[nextY][nextX] = board[presentY][presentX];
             board[presentY][presentX] = '.';
             return true;

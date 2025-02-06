@@ -13,7 +13,10 @@ public class Pawn extends Figure {
     private boolean pawnDoubleMove = false;
 
     protected boolean move(int presentX, int presentY, int nextX, int nextY){
-    return imitateMove(presentX,presentY,nextX,nextY);
+    if(checkIsFigureTheSameTeam(presentX, presentY, nextX, nextY)) {
+        return imitateMove(presentX, presentY, nextX, nextY);
+    }
+    return false;
 }
 
     protected boolean beat(int presentX, int presentY, int nextX, int nextY) {

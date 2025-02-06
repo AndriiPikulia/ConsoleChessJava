@@ -44,7 +44,7 @@ public class Rook extends Figure {
     protected boolean move(int presentX, int presentY, int nextX, int nextY) {
         boolean isSuccessfulImitate = imitateMove(presentX, presentY, nextX, nextY);
 
-        if (!isSuccessfulImitate) {
+        if (!isSuccessfulImitate || checkIsFigureTheSameTeam(presentX, presentY, nextX, nextY)) {
             return false;
         }
 
