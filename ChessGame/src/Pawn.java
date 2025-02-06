@@ -3,14 +3,12 @@ import java.util.Scanner;
 
 public class Pawn extends Figure {
 
-    private final HashMap<Character,Figure> figures;
+    int[] previousMove;
 
-    public Pawn(char[][] board, HashMap<Character, Figure> figures) {
+    public Pawn(char[][] board, int[] previousMove) {
         super.board = board;
-        this.figures = figures;
+        this.previousMove = previousMove;
     }
-
-    private boolean pawnDoubleMove = false;
 
     protected boolean move(int presentX, int presentY, int nextX, int nextY){
     return imitateMove(presentX,presentY,nextX,nextY);
@@ -56,40 +54,37 @@ public class Pawn extends Figure {
         }
     }
 
-    protected void enPassantMove(int presentX, int presentY, int nextX, int nextY) {
-        if (checkEnPassant(presentX, presentY, nextX, nextY)) {
+    protected boolean enPassantMove(int presentX, int presentY, int nextX, int nextY) {
+        if (checkEnPassant(presentX, presentY, nextX, nextY) && checkIsPreviousMoveForEnPassant(nextX, presentY)) {
             board[nextY][nextX] = board[presentY][presentX];
             board[presentY][presentX] = '.';
 
             if (nextX - presentX == 1) {
                 board[presentY][presentX + 1] = '.';
-                pawnDoubleMove = false;
+                return true;
             }
             if (nextX - presentX == -1) {
                 board[presentY][presentX - 1] = '.';
-                pawnDoubleMove = false;
+                return true;
             }
         }
+
+        return false;
     }
 
     protected boolean checkEnPassant(int presentX, int presentY, int nextX, int nextY) {
-        if (!pawnDoubleMove){
-            return false;
-        }
-
         boolean canWhiteEnPassant = Character.isUpperCase(board[presentY][presentX])
                 && presentY == 4
                 && nextY == 5
                 && Math.abs(nextX - presentX) == 1
-                && (board[presentY][presentX + 1] == 'p' || board[presentY][presentX - 1] == 'p')
-                && pawnDoubleMove;
+                && (board[presentY][presentX + 1] == 'p' || board[presentY][presentX - 1] == 'p');
+
 
         boolean canBlackEnPassant = Character.isLowerCase(board[presentY][presentX])
                 && presentY == 3
                 && nextY == 2
                 && Math.abs(nextX - presentX) == 1
-                && (board[presentY][presentX + 1] == 'P' || board[presentY][presentX - 1] == 'P')
-                && pawnDoubleMove;
+                && (board[presentY][presentX + 1] == 'P' || board[presentY][presentX - 1] == 'P');
         return canWhiteEnPassant || canBlackEnPassant;
     }
 
@@ -126,16 +121,22 @@ public class Pawn extends Figure {
         boolean whitePawnMove = !isBlockedByOtherFigures && pawn == 'P' && isPossibleMovePawnWhite;
         boolean blackPawnMove = !isBlockedByOtherFigures && pawn == 'p' && isPossibleMovePawnBlack;
 
-        enPassantMove(presentX, presentY, nextX, nextY);
+        if (enPassantMove(presentX, presentY, nextX, nextY)) {
+            return true;
+        }
         if(whitePawnMove || blackPawnMove){
             board[nextY][nextX] = board[presentY][presentX];
             board[presentY][presentX] = '.';
-
-            if(yLength == 2){
-                pawnDoubleMove = true;
-            }
             return true;
         }
        return beat(presentX, presentY, nextX, nextY);
+    }
+
+    boolean checkIsPreviousMoveForEnPassant(int presentX, int presentY) {
+        System.out.println();
+        return presentX == previousMove[2]
+                && presentY == previousMove[3]
+                && Math.abs(presentX - previousMove[0]) == 0
+                && Math.abs(presentY - previousMove[1]) == 2;
     }
 }

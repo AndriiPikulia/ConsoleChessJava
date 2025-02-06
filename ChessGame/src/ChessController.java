@@ -115,6 +115,10 @@ public class ChessController {
         }
 
         boolean isMoveSuccessful = figure.move(presentX, presentY, nextX, nextY);
+
+        if (isMoveSuccessful) {
+            model.setPreviousMove(presentX, presentY, nextX, nextY);
+        }
         if (figureSymbolLowerCase == 'k' && isMoveSuccessful) {
             updateKingCoordinates(figure, nextX, nextY);
         }
