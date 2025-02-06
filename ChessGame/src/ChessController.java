@@ -8,6 +8,7 @@ public class ChessController {
     private final ChessView view;
 
     Scanner scanner = new Scanner(System.in);
+    private final HashMap<String, Integer> positionHistory = new HashMap<>();
 
     public ChessController(ChessModel model, ChessView view) {
         this.model = model;
@@ -117,15 +118,28 @@ public class ChessController {
         if (figureSymbolLowerCase == 'k' && isMoveSuccessful) {
             updateKingCoordinates(figure, nextX, nextY);
         }
-        if(figureSymbolLowerCase == 'P' || figureSymbolLowerCase == 'p') {
+        if(figureSymbolLowerCase == 'p') {
             model.pawn.promotion(nextX, nextY, model.getFigures(), scanner);
-            model.pawn.beat(presentX, presentY, nextX, nextY);
-            model.pawn.enPassant(presentX, presentY, nextX, nextY);
+        }
+
+        updatePositionHistory();
+        if (isThreefoldRepetition()) {
+            System.out.println("Гра закінчена нічиєю через трьохразове повторення позиції!");
+            System.exit(0);
         }
 
         if (checkIsGameOver(!figure.checkIsFigureWhite(nextX, nextY))) {
             System.exit(0);
         }
+    }
+
+    private void updatePositionHistory() {
+        String state = Arrays.deepToString(model.board);
+        positionHistory.put(state, positionHistory.getOrDefault(state, 0) + 1);
+    }
+
+    public boolean isThreefoldRepetition() {
+        return positionHistory.getOrDefault(Arrays.deepToString(model.board), 0) >= 3;
     }
 
     public boolean checkCanBeKingAttackedAfterMove(int startX, int startY, int endX, int endY) {
@@ -164,16 +178,16 @@ public class ChessController {
         boolean isStalemate = checkIsStalemate(isCheckForWhite);
 
         if (isCheckmate) {
+            model.isGameOver = true;
             System.out.println("Мат!");
-            return true;
         }
 
         if (isStalemate) {
+            model.isGameOver = true;
             System.out.println("Пат");
-            return true;
         }
 
-        return false;
+         return false;
     }
 
     protected boolean checkIsCheckmate(boolean isCheckForWhite) {
