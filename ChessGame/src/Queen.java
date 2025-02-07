@@ -5,9 +5,6 @@ public class Queen extends Figure {
 
     @Override
     protected boolean move(int presentX, int presentY, int nextX, int nextY) {
-        if(checkIsFigureTheSameTeam(presentX, presentY, nextX, nextY)) {
-            return false;
-        }
         boolean isPossibleMove = (Math.abs(nextX - presentX) == Math.abs(nextY - presentY)
                 || (presentX - nextX == 0 || presentY - nextY == 0));
 
