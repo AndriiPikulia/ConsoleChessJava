@@ -103,11 +103,11 @@ public class ChessController {
     public void moveFigure(char figureSymbol, int presentX, int presentY, int nextX, int nextY) {
         char figureSymbolLowerCase = Character.toLowerCase(figureSymbol);
         Figure figure = model.figures.get(figureSymbolLowerCase);
-
-        if (figure == null) {
+        boolean checkIsFigureTheSameTeam = figure.checkIsFigureTheSameTeam(presentX, presentY, nextX, nextY);
+        if (figure == null || checkIsFigureTheSameTeam) {
+            System.out.println("Ви не можете побити свою ж фігуру");
             return;
         }
-
         boolean canBeKingAttackedAfterMove = checkCanBeKingAttackedAfterMove(presentX, presentY, nextX, nextY);
 
         if (canBeKingAttackedAfterMove) {

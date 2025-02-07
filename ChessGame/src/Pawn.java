@@ -11,8 +11,8 @@ public class Pawn extends Figure {
     }
 
     protected boolean move(int presentX, int presentY, int nextX, int nextY){
-    return imitateMove(presentX,presentY,nextX,nextY);
-}
+        return imitateMove(presentX, presentY, nextX, nextY);
+    }
 
     protected boolean beat(int presentX, int presentY, int nextX, int nextY) {
         boolean isPossibleBeatWhite = (Math.abs(nextX - presentX) == 1) && (nextY - presentY == 1)

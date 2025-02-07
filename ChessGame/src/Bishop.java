@@ -5,7 +5,6 @@ public class Bishop extends Figure{
 
     @Override
     protected boolean move(int presentX, int presentY, int nextX, int nextY) {
-
         boolean isPossibleMove = Math.abs(nextX - presentX) == Math.abs(nextY - presentY);
         boolean isBlockedByOtherFigures = checkIsFigureBetweenFields(presentX, presentY, nextX, nextY);
 
