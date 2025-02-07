@@ -73,20 +73,22 @@ public class Pawn extends Figure {
     }
 
     protected boolean checkEnPassant(int presentX, int presentY, int nextX, int nextY) {
-        boolean canWhiteEnPassant = Character.isUpperCase(board[presentY][presentX])
-                && presentY == 4
-                && nextY == 5
-                && Math.abs(nextX - presentX) == 1
-                && (board[presentY][presentX + 1] == 'p' || board[presentY][presentX - 1] == 'p');
+        boolean isWhite = Character.isUpperCase(board[presentY][presentX]);
+        boolean isBlack = Character.isLowerCase(board[presentY][presentX]);
 
+        boolean rightPawn = (presentX + 1 < 8) && (isWhite && board[presentY][presentX + 1] == 'p'
+                || isBlack && board[presentY][presentX + 1] == 'P');
+        boolean leftPawn = (presentX - 1 >= 0) && (isWhite && board[presentY][presentX - 1] == 'p'
+                || isBlack && board[presentY][presentX - 1] == 'P');
 
-        boolean canBlackEnPassant = Character.isLowerCase(board[presentY][presentX])
-                && presentY == 3
-                && nextY == 2
-                && Math.abs(nextX - presentX) == 1
-                && (board[presentY][presentX + 1] == 'P' || board[presentY][presentX - 1] == 'P');
+        boolean canWhiteEnPassant = isWhite && presentY == 4 && nextY == 5
+                && Math.abs(nextX - presentX) == 1 && (rightPawn || leftPawn);
+        boolean canBlackEnPassant = isBlack && presentY == 3 && nextY == 2
+                && Math.abs(nextX - presentX) == 1 && (rightPawn || leftPawn);
+
         return canWhiteEnPassant || canBlackEnPassant;
     }
+
 
     @Override
     protected boolean checkCanAttackField(int pawnX, int pawnY, int fieldX, int fieldY) {

@@ -90,8 +90,8 @@ public class ChessController {
             }
         }
         return true;
-    }
 
+    }
 
     public char getLetterCoordinate(String presentCellCoordinates) {
         return presentCellCoordinates.charAt(0);
@@ -104,8 +104,9 @@ public class ChessController {
         char figureSymbolLowerCase = Character.toLowerCase(figureSymbol);
         Figure figure = model.figures.get(figureSymbolLowerCase);
         boolean checkIsFigureTheSameTeam = figure.checkIsFigureTheSameTeam(presentX, presentY, nextX, nextY);
-        if (figure == null || checkIsFigureTheSameTeam) {
+        if (checkIsFigureTheSameTeam) {
             System.out.println("Ви не можете побити свою ж фігуру");
+            model.moveCount--;
             return;
         }
         boolean canBeKingAttackedAfterMove = checkCanBeKingAttackedAfterMove(presentX, presentY, nextX, nextY);
@@ -118,6 +119,11 @@ public class ChessController {
 
         if (isMoveSuccessful) {
             model.setPreviousMove(presentX, presentY, nextX, nextY);
+            updatePositionHistory();
+        }
+        else {
+            System.out.println("Неможливий хід");
+            model.moveCount--;
         }
         if (figureSymbolLowerCase == 'k' && isMoveSuccessful) {
             updateKingCoordinates(figure, nextX, nextY);
@@ -126,7 +132,6 @@ public class ChessController {
             model.pawn.promotion(nextX, nextY, model.getFigures(), scanner);
         }
 
-        updatePositionHistory();
         if (isThreefoldRepetition()) {
             System.out.println("Гра закінчена нічиєю через трьохразове повторення позиції!");
             System.exit(0);
