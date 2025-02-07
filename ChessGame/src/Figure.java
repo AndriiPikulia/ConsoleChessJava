@@ -40,11 +40,8 @@ abstract public class Figure {
         if(board[presentY][presentX] == '.' || board[nextY][nextX] == '.') {
            return false;
        }
-        else if(checkIsTwoFigureWhite || checkIsTwoFigureBlack) {
-            return true;
-        }
-        return false;
-    }
+        else return checkIsTwoFigureWhite || checkIsTwoFigureBlack;
+   }
 
     protected boolean checkCanAttackField(int figureX, int figureY, int fieldX, int fieldY) {
         char field = board[fieldY][fieldX];
