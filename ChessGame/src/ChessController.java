@@ -34,8 +34,18 @@ public class ChessController {
         System.out.println("Введіть координати фігури якою зочете зробити хід");
         String presentCellCoordinates = scanner.nextLine();
 
+        if(!MoveValidation(presentCellCoordinates, boardPositions) || presentCellCoordinates.length() != 2){
+            System.out.println("Неправильно введено початкові координати");
+            return;
+        }
+
         System.out.println("Введіть координати куди хочете походити");
         String nextCellCoordinates = scanner.nextLine();
+
+        if(!MoveValidation(nextCellCoordinates, boardPositions) || nextCellCoordinates.length() != 2){
+            System.out.println("Неправильно введено наступні координати");
+            return;
+        }
 
         model.setPresentCellCoordinates(presentCellCoordinates);
         model.setNextCellCoordinates(nextCellCoordinates);
@@ -279,5 +289,25 @@ public class ChessController {
             }
         }
         return false;
+    }
+    protected boolean MoveValidation(String CellCoordinates, HashMap<Character, Integer> boardPositions) {
+        if(CellCoordinates.length() < 2){
+            return false;
+        }
+
+        char letter = CellCoordinates.charAt(0);
+        char number = CellCoordinates.charAt(1);
+
+        if(!(Character.isLetter(letter) && Character.isDigit(number))) {
+            return false;
+        }
+
+        if(boardPositions.containsKey(letter) && boardPositions.containsValue(Character.getNumericValue(number))) {
+            return true;
+        }
+
+        else {
+            return false;
+        }
     }
 }
