@@ -34,7 +34,7 @@ public class ChessController {
         System.out.println("Введіть координати фігури якою зочете зробити хід");
         String presentCellCoordinates = scanner.nextLine();
 
-        if(!MoveValidation(presentCellCoordinates, boardPositions) || presentCellCoordinates.length() != 2){
+        if(!inputValidation(presentCellCoordinates, boardPositions) || presentCellCoordinates.length() != 2){
             System.out.println("Неправильно введено початкові координати");
             return;
         }
@@ -42,7 +42,7 @@ public class ChessController {
         System.out.println("Введіть координати куди хочете походити");
         String nextCellCoordinates = scanner.nextLine();
 
-        if(!MoveValidation(nextCellCoordinates, boardPositions) || nextCellCoordinates.length() != 2){
+        if(!inputValidation(nextCellCoordinates, boardPositions) || nextCellCoordinates.length() != 2){
             System.out.println("Неправильно введено наступні координати");
             return;
         }
@@ -290,7 +290,7 @@ public class ChessController {
         }
         return false;
     }
-    protected boolean MoveValidation(String CellCoordinates, HashMap<Character, Integer> boardPositions) {
+    protected boolean inputValidation(String CellCoordinates, HashMap<Character, Integer> boardPositions) {
         if(CellCoordinates.length() < 2){
             return false;
         }
