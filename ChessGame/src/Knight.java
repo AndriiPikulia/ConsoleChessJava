@@ -4,23 +4,23 @@ public class Knight extends Figure {
         super.board = board;
     }
 
-    protected boolean move(int presentX, int presentY, int nextX, int nextY) {
-        int xDifference = Math.abs(presentX - nextX);
-        int yDifference = Math.abs(presentY - nextY);
+    protected boolean move(Point present, Point next) {
+        int xDifference = Math.abs(present.getX() - next.getX());
+        int yDifference = Math.abs(present.getY() - next.getY());
 
         boolean isPossibleMove = xDifference == 1 && yDifference == 2
                 || xDifference == 2 && yDifference == 1;
 
-        if (isPossibleMove && !checkIsFigureTheSameTeam(presentX, presentY, nextX, nextY)) {
-            board[nextY][nextX] = board[presentY][presentX];
-            board[presentY][presentX] = '.';
+        if (isPossibleMove && !checkIsFigureTheSameTeam(present, next)) {
+            board[next.getY()][next.getX()] = board[present.getY()][present.getX()];
+            board[present.getY()][present.getX()] = '.';
             return true;
         }
 
         return false;
     }
 
-    protected boolean imitateMove(int presentX, int presentY, int nextX, int nextY) {
-        return move(presentX, presentY, nextX, nextY);
+    protected boolean imitateMove(Point present, Point next) {
+        return move(present, next);
     }
 }
