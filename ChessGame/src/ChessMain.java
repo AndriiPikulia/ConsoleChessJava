@@ -19,7 +19,6 @@ public class ChessMain {
             }
             controller.updateView();
             controller.inputCoordinates(scanner, model.board, boardPositions);
-            controller.updateView();
         }
         System.out.println("Game over!");
         System.exit(0);

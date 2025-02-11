@@ -124,6 +124,8 @@ public class ChessController {
         boolean canBeKingAttackedAfterMove = checkCanBeKingAttackedAfterMove(present, next);
 
         if (canBeKingAttackedAfterMove) {
+            System.out.println("Шах! Неможливий хід");
+            model.moveCount--;
             return;
         }
 
