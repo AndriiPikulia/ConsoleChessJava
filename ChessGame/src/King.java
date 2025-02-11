@@ -34,7 +34,7 @@ public class King extends Figure {
     protected boolean imitateMove(Point present, Point next) {
         boolean isPossibleUsualMove = (Math.abs(next.getX() - present.getX()) <= 1 && Math.abs(next.getY() - present.getY()) <= 1);
 
-        if (isPossibleUsualMove) {
+        if (isPossibleUsualMove && !checkIsFigureTheSameTeam(present, next)) {
             board[next.getY()][next.getX()] = board[present.getY()][present.getX()];
             board[present.getY()][present.getX()] = '.';
             return true;
