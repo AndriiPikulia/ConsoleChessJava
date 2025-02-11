@@ -30,11 +30,11 @@ public class ChessController {
         boardPositions.put('h',8);
     }
 
-    public void inputCoordinates(Scanner scanner, char[][] board, HashMap<Character, Integer> boardPositions) {
+    public void inputCoordinates(Scanner scanner, HashMap<Character, Integer> boardPositions) {
         System.out.println("Введіть координати фігури якою зочете зробити хід");
         String presentCellCoordinates = scanner.nextLine();
 
-        if(!inputValidation(presentCellCoordinates, boardPositions) || presentCellCoordinates.length() != 2){
+        if (!inputValidation(presentCellCoordinates, boardPositions) || presentCellCoordinates.length() != 2) {
             System.out.println("Неправильно введено початкові координати");
             return;
         }
@@ -42,14 +42,16 @@ public class ChessController {
         System.out.println("Введіть координати куди хочете походити");
         String nextCellCoordinates = scanner.nextLine();
 
-        if(!inputValidation(nextCellCoordinates, boardPositions) || nextCellCoordinates.length() != 2){
+        if (!inputValidation(nextCellCoordinates, boardPositions) || nextCellCoordinates.length() != 2) {
             System.out.println("Неправильно введено наступні координати");
             return;
         }
 
         model.setPresentCellCoordinates(presentCellCoordinates);
         model.setNextCellCoordinates(nextCellCoordinates);
+        }
 
+        public void stringCoordinatesToNumber(char[][] board, HashMap<Character, Integer> boardPositions){
         int nextLetterKeyToNumber = 0;
         int presentLetterKeyToNumber = 0;
 
@@ -115,19 +117,8 @@ public class ChessController {
     public void moveFigure(char figureSymbol, Point present, Point next) {
         char figureSymbolLowerCase = Character.toLowerCase(figureSymbol);
         Figure figure = model.figures.get(figureSymbolLowerCase);
-        boolean checkIsFigureTheSameTeam = figure.checkIsFigureTheSameTeam(present, next);
-        if (checkIsFigureTheSameTeam) {
-            System.out.println("Ви не можете побити свою ж фігуру");
-            model.moveCount--;
-            return;
-        }
-        boolean canBeKingAttackedAfterMove = checkCanBeKingAttackedAfterMove(present, next);
 
-        if (canBeKingAttackedAfterMove) {
-            System.out.println("Шах! Неможливий хід");
-            model.moveCount--;
-            return;
-        }
+        checkExceptions(figureSymbol,present,next);
 
         boolean isMoveSuccessful = figure.move(present, next);
 
@@ -153,6 +144,24 @@ public class ChessController {
 
         if (checkIsGameOver(!figure.checkIsFigureWhite(next))) {
             System.exit(0);
+        }
+    }
+
+    public void checkExceptions(char figureSymbol, Point present, Point next){
+        char figureSymbolLowerCase = Character.toLowerCase(figureSymbol);
+        Figure figure = model.figures.get(figureSymbolLowerCase);
+        boolean checkIsFigureTheSameTeam = figure.checkIsFigureTheSameTeam(present, next);
+
+        if (checkIsFigureTheSameTeam) {
+            System.out.println("Ви не можете побити свою ж фігуру");
+            model.moveCount--;
+            return;
+        }
+        boolean canBeKingAttackedAfterMove = checkCanBeKingAttackedAfterMove(present, next);
+
+        if (canBeKingAttackedAfterMove) {
+            System.out.println("Шах! Неможливий хід");
+            model.moveCount--;
         }
     }
 
