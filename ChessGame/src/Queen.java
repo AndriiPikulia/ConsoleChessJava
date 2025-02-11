@@ -4,22 +4,22 @@ public class Queen extends Figure {
     }
 
     @Override
-    protected boolean move(int presentX, int presentY, int nextX, int nextY) {
-        boolean isPossibleMove = (Math.abs(nextX - presentX) == Math.abs(nextY - presentY)
-                || (presentX - nextX == 0 || presentY - nextY == 0));
+    protected boolean move(Point present, Point next) {
+        boolean isPossibleMove = (Math.abs(next.getX() - present.getX()) == Math.abs(next.getY() - present.getY())
+                || (present.getX() - next.getX() == 0 || present.getY() - next.getY() == 0));
 
-        boolean isBlockedByOtherFigures = checkIsFigureBetweenFields(presentX, presentY, nextX, nextY);
+        boolean isBlockedByOtherFigures = checkIsFigureBetweenFields(present, next);
 
         if (isPossibleMove && !isBlockedByOtherFigures) {
-            board[nextY][nextX] = board[presentY][presentX];
-            board[presentY][presentX] = '.';
+            board[next.getY()][next.getX()] = board[present.getY()][present.getX()];
+            board[present.getY()][present.getX()] = '.';
             return true;
         }
 
         return false;
     }
 
-    protected boolean imitateMove(int presentX, int presentY, int nextX, int nextY) {
-        return move(presentX, presentY, nextX, nextY);
+    protected boolean imitateMove(Point present, Point next) {
+        return move(present, next);
     }
 }

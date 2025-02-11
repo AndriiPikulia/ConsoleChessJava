@@ -6,8 +6,8 @@ public class ChessModel {
     boolean isGameOver;
     int moveCount = 1;
     int[] previousMove;
-    int[] whiteKingCoordinates;
-    int[] blackKingCoordinates;
+    Point whiteKingPoint;
+    Point blackKingPoint;
     HashMap<Character, Figure> figures;
     Knight knight;
     Pawn pawn;
@@ -28,8 +28,8 @@ public class ChessModel {
         this.queen = new Queen(board);
         this.king = new King(board, rook, figures);
 
-        whiteKingCoordinates = new int[] {4, 0};
-        blackKingCoordinates = new int[] {4, 7};
+        whiteKingPoint = new Point(4, 0);
+        blackKingPoint = new Point(4, 7);
 
         figures.put('n', knight);
         figures.put('p', pawn);

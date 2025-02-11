@@ -13,61 +13,61 @@ public class King extends Figure {
     }
 
     @Override
-    protected boolean move(int presentX, int presentY, int nextX, int nextY) {
-        boolean isSuccessfulImitate = imitateMove(presentX, presentY, nextX, nextY);
-        boolean isCastingSuccessful = castling(presentX, presentY, nextX, nextY);
+    protected boolean move(Point present, Point next) {
+        boolean isSuccessfulImitate = imitateMove(present, next);
+        boolean isCastingSuccessful = castling(present, next);
 
         if (!isSuccessfulImitate && !isCastingSuccessful) {
             return false;
         }
 
-        if(presentX == 4 && presentY == 0) {
+        if(present.getX() == 4 && present.getY() == 0) {
             isWhiteKingMoved = true;
         }
-        if(presentX == 4 && presentY == 7) {
+        if(present.getX() == 4 && present.getY() == 7) {
             isBlackKingMoved = true;
         }
 
         return true;
     }
 
-    protected boolean imitateMove(int presentX, int presentY, int nextX, int nextY) {
-        boolean isPossibleUsualMove = (Math.abs(nextX - presentX) <= 1 && Math.abs(nextY - presentY) <= 1);
+    protected boolean imitateMove(Point present, Point next) {
+        boolean isPossibleUsualMove = (Math.abs(next.getX() - present.getX()) <= 1 && Math.abs(next.getY() - present.getY()) <= 1);
 
-        if (isPossibleUsualMove) {
-            board[nextY][nextX] = board[presentY][presentX];
-            board[presentY][presentX] = '.';
+        if (isPossibleUsualMove && !checkIsFigureTheSameTeam(present, next)) {
+            board[next.getY()][next.getX()] = board[present.getY()][present.getX()];
+            board[present.getY()][present.getX()] = '.';
             return true;
         }
 
         return false;
     }
 
-    protected boolean castling(int presentX, int presentY, int nextX, int nextY) {
-        boolean isCastling = isPossibleCastling(presentX, presentY, nextX, nextY);
+    protected boolean castling(Point present, Point next) {
+        boolean isCastling = isPossibleCastling(present, next);
 
         if (isCastling) {
-            int directionOne = nextX - presentX > 0 ? -1 : 1;
-            int presentRookX = nextX - presentX > 0 ? 7 : 0;
-            char rookSymbol = checkIsFigureWhite(presentX, presentY) ? 'R' : 'r';
+            int directionOne = next.getX() - present.getX() > 0 ? -1 : 1;
+            int presentRookX = next.getX() - present.getX() > 0 ? 7 : 0;
+            char rookSymbol = checkIsFigureWhite(present) ? 'R' : 'r';
 
-            board[presentY][nextX] = board[presentY][presentX];
-            board[presentY][presentX] = '.';
-            board[presentY][nextX + directionOne] = rookSymbol;
-            board[presentY][presentRookX] = '.';
+            board[present.getY()][next.getX()] = board[present.getY()][present.getX()];
+            board[present.getY()][present.getX()] = '.';
+            board[present.getY()][next.getX() + directionOne] = rookSymbol;
+            board[present.getY()][presentRookX] = '.';
         }
 
         return isCastling;
     }
 
-    private boolean isPossibleCastling(int presentX, int presentY, int nextX, int nextY) {
-        boolean isKingWhite = checkIsFigureWhite(presentX, presentY);
-        boolean isCastlingAllowed = presentX == 4 && nextY - presentY == 0 && Math.abs(nextX - presentX) == 2
-                && !checkIsFigureBetweenFields(presentX, presentY, nextX, nextY);
-        boolean isPossibleLeftWhiteCastling = isKingWhite && !isWhiteKingMoved && !rook.isLeftWhiteRookMoved() && nextX == 6;
-        boolean isPossibleRightWhiteCastling = isKingWhite && !isWhiteKingMoved && !rook.isRightWhiteRookMoved() && nextX == 2;
-        boolean isPossibleRightBlackCastling = !isKingWhite && !isBlackKingMoved && !rook.isRightBlackRookMoved() && nextX == 6;
-        boolean isPossibleLeftBlackCastling = !isKingWhite && !isBlackKingMoved && !rook.isLeftBlackRookMoved() && nextX == 2;
+    private boolean isPossibleCastling(Point present, Point next) {
+        boolean isKingWhite = checkIsFigureWhite(present);
+        boolean isCastlingAllowed = present.getX() == 4 && next.getY() - present.getY() == 0 && Math.abs(next.getX() - present.getX()) == 2
+                && !checkIsFigureBetweenFields(present, next);
+        boolean isPossibleLeftWhiteCastling = isKingWhite && !isWhiteKingMoved && !rook.isLeftWhiteRookMoved() && next.getX() == 6;
+        boolean isPossibleRightWhiteCastling = isKingWhite && !isWhiteKingMoved && !rook.isRightWhiteRookMoved() && next.getX() == 2;
+        boolean isPossibleRightBlackCastling = !isKingWhite && !isBlackKingMoved && !rook.isRightBlackRookMoved() && next.getX() == 6;
+        boolean isPossibleLeftBlackCastling = !isKingWhite && !isBlackKingMoved && !rook.isLeftBlackRookMoved() && next.getX() == 2;
         boolean isPossibleCastling =  (isCastlingAllowed && (isPossibleLeftWhiteCastling || isPossibleRightWhiteCastling
                 || isPossibleRightBlackCastling || isPossibleLeftBlackCastling));
 
@@ -75,13 +75,13 @@ public class King extends Figure {
             return false;
         }
 
-        for (int i = presentX; i <= nextX; i++) {
-            if (checkIsFieldAttacked(isKingWhite, new int[] {i, presentY})) {
+        for (int i = present.getX(); i <= next.getX(); i++) {
+            if (checkIsFieldAttacked(isKingWhite, new Point(i, present.getY()))) {
                 return false;
             }
         }
-        for (int i = presentX; i >= nextX; i--) {
-            if (checkIsFieldAttacked(isKingWhite, new int[] {i, presentY})) {
+        for (int i = present.getX(); i >= next.getX(); i--) {
+            if (checkIsFieldAttacked(isKingWhite, new Point(i, present.getY()))) {
                 return false;
             }
         }
@@ -89,7 +89,7 @@ public class King extends Figure {
         return true;
     }
 
-    protected boolean checkIsFieldAttacked(boolean isFieldWhite, int[] coordinates) {
+    protected boolean checkIsFieldAttacked(boolean isFieldWhite, Point point) {
         boolean isAttacked = false;
 
         outer:
@@ -104,7 +104,7 @@ public class King extends Figure {
                 }
 
                 if (figureChar != '.') {
-                    isAttacked = figures.get(figureCharLowerCase).checkCanAttackField(x, y, coordinates[0], coordinates[1]);
+                    isAttacked = figures.get(figureCharLowerCase).checkCanAttackField(new Point(x, y), point);
                 }
 
                 if(isAttacked) {

@@ -69,32 +69,34 @@ public class ChessController {
                 nextLetterKeyToNumber = entry.getValue() - 1;
             }
         }
+        Point present = new Point(presentLetterKeyToNumber, presentNumberCoordinate);
+        Point next = new Point(nextLetterKeyToNumber, nextNumberCoordinate);
 
         char figureSymbol = board[presentNumberCoordinate][presentLetterKeyToNumber];
 
-        if (moveValidation(model.moveCount, board, presentLetterKeyToNumber, presentNumberCoordinate)) {
-            moveFigure(figureSymbol, presentLetterKeyToNumber, presentNumberCoordinate, nextLetterKeyToNumber, nextNumberCoordinate);
+        if (moveValidation(model.moveCount, board, present)) {
+            moveFigure(figureSymbol, present, next);
             model.moveCount++;
         }
     }
 
-    public boolean moveValidation(int moveCount, char[][] board, int presentX, int presentY) {
+    public boolean moveValidation(int moveCount, char[][] board, Point present) {
         if ((moveCount % 2) != 0) {
-            if (Character.isLowerCase(board[presentY][presentX])) {
+            if (Character.isLowerCase(board[present.getY()][present.getX()])) {
                 System.out.println("Це фігура команди чорних! Хід зробити неможливо");
                 return false;
             }
-            if (board[presentY][presentX] == '.') {
+            if (board[present.getY()][present.getX()] == '.') {
                 System.out.println("Це пуста клітинка! Хід зробити неможливо");
                 return false;
             }
         }
         if ((moveCount % 2) == 0) {
-            if (Character.isUpperCase(board[presentY][presentX])) {
+            if (Character.isUpperCase(board[present.getY()][present.getX()])) {
                 System.out.println("Це фігура команди білих! Хід зробити неможливо");
                 return false;
             }
-            if (board[presentY][presentX] == '.') {
+            if (board[present.getY()][present.getX()] == '.') {
                 System.out.println("Це пуста клітинка! Хід зробити неможливо");
                 return false;
             }
@@ -110,25 +112,27 @@ public class ChessController {
         return Integer.parseInt(presentCellCoordinates.substring(1));
     }
 
-    public void moveFigure(char figureSymbol, int presentX, int presentY, int nextX, int nextY) {
+    public void moveFigure(char figureSymbol, Point present, Point next) {
         char figureSymbolLowerCase = Character.toLowerCase(figureSymbol);
         Figure figure = model.figures.get(figureSymbolLowerCase);
-        boolean checkIsFigureTheSameTeam = figure.checkIsFigureTheSameTeam(presentX, presentY, nextX, nextY);
+        boolean checkIsFigureTheSameTeam = figure.checkIsFigureTheSameTeam(present, next);
         if (checkIsFigureTheSameTeam) {
             System.out.println("Ви не можете побити свою ж фігуру");
             model.moveCount--;
             return;
         }
-        boolean canBeKingAttackedAfterMove = checkCanBeKingAttackedAfterMove(presentX, presentY, nextX, nextY);
+        boolean canBeKingAttackedAfterMove = checkCanBeKingAttackedAfterMove(present, next);
 
         if (canBeKingAttackedAfterMove) {
+            System.out.println("Шах! Неможливий хід");
+            model.moveCount--;
             return;
         }
 
-        boolean isMoveSuccessful = figure.move(presentX, presentY, nextX, nextY);
+        boolean isMoveSuccessful = figure.move(present, next);
 
         if (isMoveSuccessful) {
-            model.setPreviousMove(presentX, presentY, nextX, nextY);
+            model.setPreviousMove(present.getX(), present.getY(), next.getX(), next.getY());
             updatePositionHistory();
         }
         else {
@@ -136,10 +140,10 @@ public class ChessController {
             model.moveCount--;
         }
         if (figureSymbolLowerCase == 'k' && isMoveSuccessful) {
-            updateKingCoordinates(figure, nextX, nextY);
+            updateKingCoordinates(figure, next);
         }
         if(figureSymbolLowerCase == 'p') {
-            model.pawn.promotion(nextX, nextY, model.getFigures(), scanner);
+            model.pawn.promotion(next, model.getFigures(), scanner);
         }
 
         if (isThreefoldRepetition()) {
@@ -147,7 +151,7 @@ public class ChessController {
             System.exit(0);
         }
 
-        if (checkIsGameOver(!figure.checkIsFigureWhite(nextX, nextY))) {
+        if (checkIsGameOver(!figure.checkIsFigureWhite(next))) {
             System.exit(0);
         }
     }
@@ -161,34 +165,34 @@ public class ChessController {
         return positionHistory.getOrDefault(Arrays.deepToString(model.board), 0) >= 3;
     }
 
-    public boolean checkCanBeKingAttackedAfterMove(int startX, int startY, int endX, int endY) {
-        char startFigure = model.board[startY][startX];
-        char endFigure = model.board[endY][endX];
+    public boolean checkCanBeKingAttackedAfterMove(Point start, Point end) {
+        char startFigure = model.board[start.getY()][start.getX()];
+        char endFigure = model.board[end.getY()][end.getX()];
         boolean isStartFigureWhite = Character.isUpperCase(startFigure);
-        int[] kingCoordinates = Arrays.copyOf(isStartFigureWhite ? model.whiteKingCoordinates : model.blackKingCoordinates, 2);
+        Point kingPoint = isStartFigureWhite ? model.whiteKingPoint : model.blackKingPoint;
         boolean canBeKingAttackedAfterMove;
 
-        model.board[startY][startX] = '.';
-        model.board[endY][endX] = startFigure;
+        model.board[start.getY()][start.getX()] = '.';
+        model.board[end.getY()][end.getX()] = startFigure;
         if (Character.toLowerCase(startFigure) == 'k') {
-            kingCoordinates = new int[] {endX, endY};
+            kingPoint = new Point(end);
         }
 
-        canBeKingAttackedAfterMove = model.king.checkIsFieldAttacked(isStartFigureWhite, kingCoordinates);
+        canBeKingAttackedAfterMove = model.king.checkIsFieldAttacked(isStartFigureWhite, kingPoint);
 
-        model.board[startY][startX] = startFigure;
-        model.board[endY][endX] = endFigure;
+        model.board[start.getY()][start.getX()] = startFigure;
+        model.board[end.getY()][end.getX()] = endFigure;
         return canBeKingAttackedAfterMove;
     }
 
-    protected void updateKingCoordinates(Figure figure, int newX, int newY) {
-        boolean isKingWhite = figure.checkIsFigureWhite(newX, newY);
+    protected void updateKingCoordinates(Figure figure, Point next) {
+        boolean isKingWhite = figure.checkIsFigureWhite(next);
 
         if (isKingWhite) {
-            model.whiteKingCoordinates = new int[] {newX, newY};
+            model.whiteKingPoint = new Point(next);
         }
         if (!isKingWhite) {
-            model.blackKingCoordinates = new int[] {newX, newY};
+            model.blackKingPoint = new Point(next);
         }
     }
 
@@ -210,9 +214,9 @@ public class ChessController {
     }
 
     protected boolean checkIsCheckmate(boolean isCheckForWhite) {
-        int[] kingCoordinates = isCheckForWhite ? model.whiteKingCoordinates : model.blackKingCoordinates;
+        Point kingPoint = isCheckForWhite ? model.whiteKingPoint : model.blackKingPoint;
 
-        if (!model.king.checkIsFieldAttacked(isCheckForWhite, kingCoordinates)) {
+        if (!model.king.checkIsFieldAttacked(isCheckForWhite, kingPoint)) {
             return false;
         }
 
@@ -223,7 +227,7 @@ public class ChessController {
                     continue;
                 }
 
-                if (checkCanFigureAvoidCheckmate(x, y, isCheckForWhite, kingCoordinates)) {
+                if (checkCanFigureAvoidCheckmate(new Point(x, y), isCheckForWhite, kingPoint)) {
                     return false;
                 }
             }
@@ -233,9 +237,9 @@ public class ChessController {
     }
 
     protected boolean checkIsStalemate(boolean isCheckForWhite) {
-        int[] kingCoordinates = isCheckForWhite ? model.whiteKingCoordinates : model.blackKingCoordinates;
+        Point kingPoint = isCheckForWhite ? model.whiteKingPoint : model.blackKingPoint;
 
-        if (model.king.checkIsFieldAttacked(isCheckForWhite, kingCoordinates)) {
+        if (model.king.checkIsFieldAttacked(isCheckForWhite, kingPoint)) {
             return false;
         }
 
@@ -246,7 +250,7 @@ public class ChessController {
                     continue;
                 }
 
-                if (checkCanFigureAvoidCheckmate(x, y, isCheckForWhite, kingCoordinates)) {
+                if (checkCanFigureAvoidCheckmate(new Point(x, y), isCheckForWhite, kingPoint)) {
                     return false;
                 }
             }
@@ -257,31 +261,31 @@ public class ChessController {
 
 
 
-    protected boolean checkCanFigureAvoidCheckmate(int startX, int startY, boolean isWhite, int[] kingCoordinates) {
-        Figure figure = model.figures.get(Character.toLowerCase(model.board[startY][startX]));
+    protected boolean checkCanFigureAvoidCheckmate(Point start, boolean isWhite, Point kingPoint) {
+        Figure figure = model.figures.get(Character.toLowerCase(model.board[start.getY()][start.getX()]));
 
         for (int x = 0; x < model.board.length; x++) {
             for (int y = 0; y < model.board[0].length; y++) {
                 char attackedField = model.board[y][x];
 
-                if (startX == x && startY == y) {
+                if (start.getX() == x && start.getY() == y) {
                     continue;
                 }
-                if (Character.toLowerCase(model.board[startY][startX]) == 'k') {
-                    kingCoordinates[0] = x;
-                    kingCoordinates[1] = y;
+                if (Character.toLowerCase(model.board[start.getY()][start.getX()]) == 'k') {
+                    kingPoint.setX(x);
+                    kingPoint.setY(y);
                 }
 
-                boolean isMoveSuccessful = figure.imitateMove(startX, startY, x, y);
-                boolean isKingAttacked = model.king.checkIsFieldAttacked(isWhite, kingCoordinates);
+                boolean isMoveSuccessful = figure.imitateMove(start, new Point(x, y));
+                boolean isKingAttacked = model.king.checkIsFieldAttacked(isWhite, kingPoint);
 
                 if (isMoveSuccessful) {
-                    model.board[startY][startX] = model.board[y][x];
+                    model.board[start.getY()][start.getX()] = model.board[y][x];
                     model.board[y][x] = attackedField;
                 }
-                if (Character.toLowerCase(model.board[startY][startX]) == 'k') {
-                    kingCoordinates[0] = startX;
-                    kingCoordinates[1] = startY;
+                if (Character.toLowerCase(model.board[start.getY()][start.getX()]) == 'k') {
+                    kingPoint.setX(start.getX());
+                    kingPoint.setY(start.getY());
                 }
                 if (isMoveSuccessful && !isKingAttacked) {
                     return true;

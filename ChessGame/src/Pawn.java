@@ -10,38 +10,38 @@ public class Pawn extends Figure {
         this.previousMove = previousMove;
     }
 
-    protected boolean move(int presentX, int presentY, int nextX, int nextY){
-        return imitateMove(presentX, presentY, nextX, nextY);
+    protected boolean move(Point present, Point next){
+        return imitateMove(present, next);
     }
 
-    protected boolean beat(int presentX, int presentY, int nextX, int nextY) {
-        boolean isPossibleBeatWhite = (Math.abs(nextX - presentX) == 1) && (nextY - presentY == 1)
-                && board[nextY][nextX] != '.' && Character.isLowerCase(board[nextY][nextX]);
+    protected boolean beat(Point present, Point next) {
+        boolean isPossibleBeatWhite = (Math.abs(next.getX() - present.getX()) == 1) && (next.getY() - present.getY() == 1)
+                && board[next.getY()][next.getX()] != '.' && Character.isLowerCase(board[next.getY()][next.getX()]);
 
-        boolean isPossibleBeatBlack = (Math.abs(nextX - presentX) == 1) && (nextY - presentY == -1)
-                && board[nextY][nextX] != '.' && Character.isUpperCase(board[nextY][nextX]);
+        boolean isPossibleBeatBlack = (Math.abs(next.getX() - present.getX()) == 1) && (next.getY() - present.getY() == -1)
+                && board[next.getY()][next.getX()] != '.' && Character.isUpperCase(board[next.getY()][next.getX()]);
 
-        if((isPossibleBeatWhite && Character.isUpperCase(board[presentY][presentX]))
-                || (isPossibleBeatBlack && Character.isLowerCase(board[presentY][presentX]))) {
-            board[nextY][nextX] = board[presentY][presentX];
-            board[presentY][presentX] = '.';
+        if((isPossibleBeatWhite && Character.isUpperCase(board[present.getY()][present.getX()]))
+                || (isPossibleBeatBlack && Character.isLowerCase(board[present.getY()][present.getX()]))) {
+            board[next.getY()][next.getX()] = board[present.getY()][present.getX()];
+            board[present.getY()][present.getX()] = '.';
             return true;
         }
         return false;
     }
 
-    protected void promotion(int presentX, int presentY, HashMap<Character, Figure> figures, Scanner scanner) {
-        char pawn = board[presentY][presentX];
+    protected void promotion(Point present, HashMap<Character, Figure> figures, Scanner scanner) {
+        char pawn = board[present.getY()][present.getX()];
 
-        boolean isWhitePawnAtTheEnd = (pawn == 'P' && presentY == 7);
-        boolean isBlackPawnAtTheEnd = (pawn == 'p' && presentY == 0);
+        boolean isWhitePawnAtTheEnd = (pawn == 'P' && present.getY() == 7);
+        boolean isBlackPawnAtTheEnd = (pawn == 'p' && present.getY() == 0);
 
         if (isWhitePawnAtTheEnd) {
             System.out.println("Введіть фігуру на яку хочете перетворити пішака (N, Q, R, B):");
             char figureSymbol = scanner.nextLine().toLowerCase().charAt(0);
 
             if (figures.containsKey(figureSymbol)) {
-                board[presentY][presentX] = Character.toUpperCase(figureSymbol);
+                board[present.getY()][present.getX()] = Character.toUpperCase(figureSymbol);
             }
         }
         if (isBlackPawnAtTheEnd) {
@@ -49,22 +49,22 @@ public class Pawn extends Figure {
             char figureSymbol = scanner.nextLine().toLowerCase().charAt(0);
 
             if (figures.containsKey(figureSymbol)) {
-                board[presentY][presentX] = Character.toLowerCase(figureSymbol);
+                board[present.getY()][present.getX()] = Character.toLowerCase(figureSymbol);
             }
         }
     }
 
-    protected boolean enPassantMove(int presentX, int presentY, int nextX, int nextY) {
-        if (checkEnPassant(presentX, presentY, nextX, nextY) && checkIsPreviousMoveForEnPassant(nextX, presentY)) {
-            board[nextY][nextX] = board[presentY][presentX];
-            board[presentY][presentX] = '.';
+    protected boolean enPassantMove(Point present, Point next) {
+        if (checkEnPassant(present, next) && checkIsPreviousMoveForEnPassant(next.getX(), present.getY())) {
+            board[next.getY()][next.getX()] = board[present.getY()][present.getX()];
+            board[present.getY()][present.getX()] = '.';
 
-            if (nextX - presentX == 1) {
-                board[presentY][presentX + 1] = '.';
+            if (next.getX() - present.getX() == 1) {
+                board[present.getY()][present.getX() + 1] = '.';
                 return true;
             }
-            if (nextX - presentX == -1) {
-                board[presentY][presentX - 1] = '.';
+            if (next.getX() - present.getX() == -1) {
+                board[present.getY()][present.getX() - 1] = '.';
                 return true;
             }
         }
@@ -72,66 +72,66 @@ public class Pawn extends Figure {
         return false;
     }
 
-    protected boolean checkEnPassant(int presentX, int presentY, int nextX, int nextY) {
-        boolean isWhite = Character.isUpperCase(board[presentY][presentX]);
-        boolean isBlack = Character.isLowerCase(board[presentY][presentX]);
+    protected boolean checkEnPassant(Point present, Point next) {
+        boolean isWhite = Character.isUpperCase(board[present.getY()][present.getX()]);
+        boolean isBlack = Character.isLowerCase(board[present.getY()][present.getX()]);
 
-        boolean rightPawn = (presentX + 1 < 8) && (isWhite && board[presentY][presentX + 1] == 'p'
-                || isBlack && board[presentY][presentX + 1] == 'P');
-        boolean leftPawn = (presentX - 1 >= 0) && (isWhite && board[presentY][presentX - 1] == 'p'
-                || isBlack && board[presentY][presentX - 1] == 'P');
+        boolean rightPawn = (present.getX() + 1 < 8) && (isWhite && board[present.getY()][present.getX() + 1] == 'p'
+                || isBlack && board[present.getY()][present.getX() + 1] == 'P');
+        boolean leftPawn = (present.getX() - 1 >= 0) && (isWhite && board[present.getY()][present.getX() - 1] == 'p'
+                || isBlack && board[present.getY()][present.getX() - 1] == 'P');
 
-        boolean canWhiteEnPassant = isWhite && presentY == 4 && nextY == 5
-                && Math.abs(nextX - presentX) == 1 && (rightPawn || leftPawn);
-        boolean canBlackEnPassant = isBlack && presentY == 3 && nextY == 2
-                && Math.abs(nextX - presentX) == 1 && (rightPawn || leftPawn);
+        boolean canWhiteEnPassant = isWhite && present.getY() == 4 && next.getY() == 5
+                && Math.abs(next.getX() - present.getX()) == 1 && (rightPawn || leftPawn);
+        boolean canBlackEnPassant = isBlack && present.getY() == 3 && next.getY() == 2
+                && Math.abs(next.getX() - present.getX()) == 1 && (rightPawn || leftPawn);
 
         return canWhiteEnPassant || canBlackEnPassant;
     }
 
 
     @Override
-    protected boolean checkCanAttackField(int pawnX, int pawnY, int fieldX, int fieldY) {
-        boolean isPawnWhite = checkIsFigureWhite(pawnX, pawnY);
+    protected boolean checkCanAttackField(Point pawn, Point field) {
+        boolean isPawnWhite = checkIsFigureWhite(pawn);
 
-        if(isPawnWhite && pawnY + 1 == fieldY && (pawnX + 1 == fieldX || pawnX - 1 == fieldX)) {
+        if(isPawnWhite && pawn.getY() + 1 == field.getY() && (pawn.getX() + 1 == field.getX() || pawn.getX() - 1 == field.getX())) {
             return true;
         }
 
-        return !isPawnWhite && pawnY - 1 == fieldY && (pawnX + 1 == fieldX || pawnX - 1 == fieldX);
+        return !isPawnWhite && pawn.getY() - 1 == field.getY() && (pawn.getX() + 1 == field.getX() || pawn.getX() - 1 == field.getX());
     }
 
-    protected boolean imitateMove(int presentX, int presentY, int nextX, int nextY) {
-        int yLength = Math.abs(nextY - presentY);
-        char pawn = board[presentY][presentX];
+    protected boolean imitateMove(Point present, Point next) {
+        int yLength = Math.abs(next.getY() - present.getY());
+        char pawn = board[present.getY()][present.getX()];
 
-        boolean isWhitePawnStart = (pawn == 'P' && presentY == 1);
-        boolean isBlackPawnStart = (pawn == 'p' && presentY == 6);
+        boolean isWhitePawnStart = (pawn == 'P' && present.getY() == 1);
+        boolean isBlackPawnStart = (pawn == 'p' && present.getY() == 6);
 
-        boolean isBlockedByOtherFigures = checkIsFigureBetweenFields(presentX, presentY, nextX, nextY);
+        boolean isBlockedByOtherFigures = checkIsFigureBetweenFields(present, next);
 
-        boolean isPossibleMovePawnWhite = (presentX == nextX && yLength == 1 &&
-                presentY < nextY && board[nextY][nextX] == '.'
-                || isWhitePawnStart && presentX == nextX && yLength == 2 &&
-                presentY < nextY && board[nextY][nextX] == '.');
+        boolean isPossibleMovePawnWhite = (present.getX() == next.getX() && yLength == 1 &&
+                present.getY() < next.getY() && board[next.getY()][next.getX()] == '.'
+                || isWhitePawnStart && present.getX() == next.getX() && yLength == 2 &&
+                present.getY() < next.getY() && board[next.getY()][next.getX()] == '.');
 
-        boolean isPossibleMovePawnBlack = (presentX == nextX && yLength == 1 &&
-                presentY > nextY && board[nextY][nextX] == '.'
-                || isBlackPawnStart && presentX == nextX && yLength == 2 &&
-                presentY > nextY && board[nextY][nextX] == '.');
+        boolean isPossibleMovePawnBlack = (present.getX() == next.getX() && yLength == 1 &&
+                present.getY() > next.getY() && board[next.getY()][next.getX()] == '.'
+                || isBlackPawnStart && present.getX() == next.getX() && yLength == 2 &&
+                present.getY() > next.getY() && board[next.getY()][next.getX()] == '.');
 
         boolean whitePawnMove = !isBlockedByOtherFigures && pawn == 'P' && isPossibleMovePawnWhite;
         boolean blackPawnMove = !isBlockedByOtherFigures && pawn == 'p' && isPossibleMovePawnBlack;
 
-        if (enPassantMove(presentX, presentY, nextX, nextY)) {
+        if (enPassantMove(present, next)) {
             return true;
         }
         if(whitePawnMove || blackPawnMove){
-            board[nextY][nextX] = board[presentY][presentX];
-            board[presentY][presentX] = '.';
+            board[next.getY()][next.getX()] = board[present.getY()][present.getX()];
+            board[present.getY()][present.getX()] = '.';
             return true;
         }
-       return beat(presentX, presentY, nextX, nextY);
+       return beat(present, next);
     }
 
     boolean checkIsPreviousMoveForEnPassant(int presentX, int presentY) {

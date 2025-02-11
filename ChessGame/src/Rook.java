@@ -41,40 +41,40 @@ public class Rook extends Figure {
     }
 
     @Override
-    protected boolean move(int presentX, int presentY, int nextX, int nextY) {
-        boolean isSuccessfulImitate = imitateMove(presentX, presentY, nextX, nextY);
+    protected boolean move(Point present, Point next) {
+        boolean isSuccessfulImitate = imitateMove(present, next);
 
         if (!isSuccessfulImitate) {
             return false;
         }
 
-        if(presentX == 0 && presentY == 0) {
+        if(present.getX() == 0 && present.getY() == 0) {
             setRightWhiteRookMoved(true);
         }
-        if(presentX == 7 && presentY == 0) {
+        if(present.getX() == 7 && present.getY() == 0) {
             setLeftWhiteRookMoved(true);
         }
-        if(presentX == 0 && presentY == 7) {
+        if(present.getX() == 0 && present.getY() == 7) {
             setLeftBlackRookMoved(true);
         }
-        if(presentX == 7 && presentY == 7) {
+        if(present.getX() == 7 && present.getY() == 7) {
             setRightBlackRookMoved(true);
         }
 
         return true;
     }
 
-    protected boolean imitateMove(int presentX, int presentY, int nextX, int nextY) {
-        int xDifference = presentX - nextX;
-        int yDifference = presentY - nextY;
+    protected boolean imitateMove(Point present, Point next) {
+        int xDifference = present.getX() - next.getX();
+        int yDifference = present.getY() - next.getY();
 
         boolean isPossibleMove = xDifference == 0 || yDifference == 0;
-        boolean isBlockedByOtherFigures = checkIsFigureBetweenFields(presentX, presentY, nextX, nextY);
+        boolean isBlockedByOtherFigures = checkIsFigureBetweenFields(present, next);
 
         if (isPossibleMove && !isBlockedByOtherFigures) {
-            checkIsFigureTheSameTeam(presentX, presentY, nextX, nextY);
-            board[nextY][nextX] = board[presentY][presentX];
-            board[presentY][presentX] = '.';
+            checkIsFigureTheSameTeam(present, next);
+            board[next.getY()][next.getX()] = board[present.getY()][present.getX()];
+            board[present.getY()][present.getX()] = '.';
             return true;
         }
 
