@@ -240,6 +240,10 @@ public class ChessController {
             return false;
         }
 
+        return checkIsCheckmateCycle(isCheckForWhite, kingPoint);
+    }
+
+    protected boolean checkIsCheckmateCycle(boolean isCheckForWhite, Point kingPoint) {
         for (int x = 0; x < model.getBoard().length; x++) {
             for (int y = 0; y < model.getBoard()[0].length; y++) {
                 boolean isWhite = Character.isUpperCase(model.getBoard()[y][x]);
@@ -263,23 +267,8 @@ public class ChessController {
             return false;
         }
 
-        for (int x = 0; x < model.getBoard().length; x++) {
-            for (int y = 0; y < model.getBoard()[0].length; y++) {
-                boolean isWhite = Character.isUpperCase(model.getBoard()[y][x]);
-                if (isWhite != isCheckForWhite || model.getBoard()[y][x] == '.') {
-                    continue;
-                }
-
-                if (checkCanFigureAvoidCheckmate(new Point(x, y), isCheckForWhite, kingPoint)) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
+        return checkIsCheckmateCycle(isCheckForWhite, kingPoint);
     }
-
-
 
     protected boolean checkCanFigureAvoidCheckmate(Point start, boolean isWhite, Point kingPoint) {
         Figure figure = model.getFigures().get(Character.toLowerCase(model.getBoard()[start.getY()][start.getX()]));
