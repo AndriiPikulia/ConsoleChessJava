@@ -30,7 +30,7 @@ public class ChessController {
         boardPositions.put('h',8);
     }
 
-    public void inputCoordinates(Scanner scanner, HashMap<Character, Integer> boardPositions) {
+    public void inputCoordinates(Scanner scanner, char[][] board, HashMap<Character, Integer> boardPositions) {
         System.out.println("Введіть координати фігури якою зочете зробити хід");
         String presentCellCoordinates = scanner.nextLine();
 
@@ -49,9 +49,7 @@ public class ChessController {
 
         model.setPresentCellCoordinates(presentCellCoordinates);
         model.setNextCellCoordinates(nextCellCoordinates);
-    }
 
-        public void inputToNumbers(char[][] board, HashMap<Character, Integer> boardPositions){
         int nextLetterKeyToNumber = 0;
         int presentLetterKeyToNumber = 0;
 

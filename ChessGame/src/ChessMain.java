@@ -18,8 +18,7 @@ public class ChessMain {
                 System.out.println("Хід чорних");
             }
             controller.updateView();
-            controller.inputCoordinates(scanner, boardPositions);
-            controller.inputToNumbers(model.getBoard(), boardPositions);
+            controller.inputCoordinates(scanner, model.getBoard(), boardPositions);
         }
         System.out.println("Game over!");
         controller.updateView();
