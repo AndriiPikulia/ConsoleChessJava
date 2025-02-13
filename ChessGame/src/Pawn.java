@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class Pawn extends Figure {
 
-    int[] previousMove;
+    private final int[] previousMove;
 
     public Pawn(char[][] board, int[] previousMove) {
         super.board = board;
@@ -111,7 +111,7 @@ public class Pawn extends Figure {
                 || isWhitePawnStart && present.getX() == next.getX()
                 && yLength == 2 && present.getY() < next.getY() && board[next.getY()][next.getX()] == '.'){
             return true;
-        };
+        }
         return false;
     }
 
@@ -124,7 +124,7 @@ public class Pawn extends Figure {
                 || isBlackPawnStart && present.getX() == next.getX() && yLength == 2 &&
                 present.getY() > next.getY() && board[next.getY()][next.getX()] == '.'){
             return true;
-        };
+        }
         return false;
     }
 
