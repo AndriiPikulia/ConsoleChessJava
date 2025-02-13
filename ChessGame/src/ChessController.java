@@ -272,7 +272,6 @@ public class ChessController {
 
     protected boolean checkCanFigureAvoidCheckmate(Point start, boolean isWhite, Point kingPoint) {
         Figure figure = model.getFigures().get(Character.toLowerCase(model.getBoard()[start.getY()][start.getX()]));
-
         for (int x = 0; x < model.getBoard().length; x++) {
             for (int y = 0; y < model.getBoard()[0].length; y++) {
                 char attackedField = model.getBoard()[y][x];
@@ -281,8 +280,7 @@ public class ChessController {
                     continue;
                 }
                 if (Character.toLowerCase(model.getBoard()[start.getY()][start.getX()]) == 'k') {
-                    kingPoint.setX(x);
-                    kingPoint.setY(y);
+                kingPoint.SetXY(x, y);
                 }
 
                 boolean isMoveSuccessful = figure.imitateMove(start, new Point(x, y));
@@ -293,8 +291,7 @@ public class ChessController {
                     model.getBoard()[y][x] = attackedField;
                 }
                 if (Character.toLowerCase(model.getBoard()[start.getY()][start.getX()]) == 'k') {
-                    kingPoint.setX(start.getX());
-                    kingPoint.setY(start.getY());
+                    kingPoint.SetXY(x, y);
                 }
                 if (isMoveSuccessful && !isKingAttacked) {
                     return true;

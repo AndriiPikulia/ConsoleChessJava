@@ -27,4 +27,9 @@ public class Point {
     protected void setY(int y) {
         this.y = y;
     }
+
+    protected void SetXY(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
 }
