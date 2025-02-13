@@ -50,6 +50,10 @@ public class ChessController {
         model.setPresentCellCoordinates(presentCellCoordinates);
         model.setNextCellCoordinates(nextCellCoordinates);
 
+        convertInputAndMove(board, boardPositions);
+    }
+
+    private void convertInputAndMove(char[][] board, HashMap<Character, Integer> boardPositions) {
         int nextLetterKeyToNumber = 0;
         int presentLetterKeyToNumber = 0;
 
