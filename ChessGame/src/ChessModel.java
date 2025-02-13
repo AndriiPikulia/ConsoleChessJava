@@ -89,11 +89,11 @@ public class ChessModel {
         figures.put('k', king);
     }
 
-    public void setPreviousMove(int presentX, int presentY, int nextX, int nextY) {
-        previousMove[0] = presentX;
-        previousMove[1] = presentY;
-        previousMove[2] = nextX;
-        previousMove[3] = nextY;
+    public void setPreviousMove(Point present, Point next) {
+        previousMove[0] = present.getX();
+        previousMove[1] = present.getY();
+        previousMove[2] = next.getX();
+        previousMove[3] = next.getY();
     }
 
     public HashMap<Character,Figure> getFigures() {

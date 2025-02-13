@@ -145,7 +145,7 @@ public class ChessController {
         boolean isMoveSuccessful = figure.move(present, next);
 
         if (isMoveSuccessful) {
-            model.setPreviousMove(present.getX(), present.getY(), next.getX(), next.getY());
+            model.setPreviousMove(present, next);
             updatePositionHistory();
         }
         else {
