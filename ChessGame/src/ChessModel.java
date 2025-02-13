@@ -1,31 +1,81 @@
 import java.util.HashMap;
 
 public class ChessModel {
-    String presentCellCoordinates;
-    String nextCellCoordinates;
-    boolean isGameOver;
-    int moveCount = 1;
-    int[] previousMove;
-    Point whiteKingPoint;
-    Point blackKingPoint;
-    HashMap<Character, Figure> figures;
-    Knight knight;
-    Pawn pawn;
-    Rook rook;
-    Bishop bishop;
-    Queen queen;
-    King king;
+    private String presentCellCoordinates;
+    private String nextCellCoordinates;
+
+    public boolean isGameOver() {
+        return isGameOver;
+    }
+
+    public int getMoveCount() {
+        return moveCount;
+    }
+
+    public Point getWhiteKingPoint() {
+        return whiteKingPoint;
+    }
+
+    public Point getBlackKingPoint() {
+        return blackKingPoint;
+    }
+
+    public Pawn getPawn() {
+        return pawn;
+    }
+
+    public King getKing() {
+        return king;
+    }
+
+    public char[][] getBoard() {
+        return board;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        isGameOver = gameOver;
+    }
+
+    public void setMoveCount(int moveCount) {
+        this.moveCount = moveCount;
+    }
+
+    public void setWhiteKingPoint(Point whiteKingPoint) {
+        this.whiteKingPoint = whiteKingPoint;
+    }
+
+    public void setBlackKingPoint(Point blackKingPoint) {
+        this.blackKingPoint = blackKingPoint;
+    }
+
+    private boolean isGameOver;
+    private int moveCount = 1;
+    private final int[] previousMove;
+    private Point whiteKingPoint;
+    private Point blackKingPoint;
+    private HashMap<Character, Figure> figures;
+    private final Pawn pawn;
+    private final King king;
+
+    private final char[][] board = {{'R','N','B','Q','K','B','N','R'},
+            {'P','P','P','P','P','P','P','P'},
+            {'.','.','.','R','.','.','.','.'},
+            {'.','.','.','.','.','.','.','.'},
+            {'.','.','.','.','.','.','.','.'},
+            {'.','.','.','.','.','.','.','.'},
+            {'p','p','p','p','.','p','p','p'},
+            {'r','n','b','q','k','b','n','r'}};
 
     public ChessModel() {
         this.figures = new HashMap<>();
         previousMove = new int[] {0, 0, 0, 0};
 
-        this.knight = new Knight(board);
+        Knight knight = new Knight(board);
         this.pawn = new Pawn(board, previousMove);
-        this.rook = new Rook(board);
+        Rook rook = new Rook(board);
         this.figures = new HashMap<>();
-        this.bishop = new Bishop(board);
-        this.queen = new Queen(board);
+        Bishop bishop = new Bishop(board);
+        Queen queen = new Queen(board);
         this.king = new King(board, rook, figures);
 
         whiteKingPoint = new Point(4, 0);
@@ -66,13 +116,5 @@ public class ChessModel {
     public void setNextCellCoordinates(String nextCellCoordinates) {
         this.nextCellCoordinates = nextCellCoordinates;
     }
-
-    char[][] board = {{'R','N','B','Q','K','B','N','R'},
-            {'P','P','P','P','P','P','P','P'},
-            {'.','.','.','.','.','.','.','.'},
-            {'.','.','.','.','.','.','.','.'},
-            {'.','.','.','.','.','.','.','.'},
-            {'.','.','.','.','.','.','.','.'},
-            {'p','p','p','p','p','p','p','p'},
-            {'r','n','b','q','k','b','n','r'}};
 }
+

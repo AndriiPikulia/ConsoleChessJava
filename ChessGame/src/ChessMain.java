@@ -10,15 +10,15 @@ public class ChessMain {
         HashMap<Character, Integer> boardPositions = new HashMap<>();
         controller.fillBoardPositions(boardPositions);
 
-        while (!model.isGameOver) {
-            System.out.println("Хід номер " + model.moveCount);
-            if ((model.moveCount % 2) != 0) {
+        while (!model.isGameOver()) {
+            System.out.println("Хід номер " + model.getMoveCount());
+            if ((model.getMoveCount() % 2) != 0) {
                 System.out.println("Хід білих");
             } else {
                 System.out.println("Хід чорних");
             }
             controller.updateView();
-            controller.inputCoordinates(scanner, model.board, boardPositions);
+            controller.inputCoordinates(scanner, model.getBoard(), boardPositions);
         }
         System.out.println("Game over!");
         controller.updateView();
