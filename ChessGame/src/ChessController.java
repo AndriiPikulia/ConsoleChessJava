@@ -30,7 +30,7 @@ public class ChessController {
         boardPositions.put('h',8);
     }
 
-    public void inputCoordinates(Scanner scanner, char[][] board, HashMap<Character, Integer> boardPositions) {
+    public void inputCoordinates(Scanner scanner, HashMap<Character, Integer> boardPositions) {
         System.out.println("Введіть координати фігури якою зочете зробити хід");
         String presentCellCoordinates = scanner.nextLine();
 
@@ -49,7 +49,9 @@ public class ChessController {
 
         model.setPresentCellCoordinates(presentCellCoordinates);
         model.setNextCellCoordinates(nextCellCoordinates);
+    }
 
+        public void inputToNumbers(char[][] board, HashMap<Character, Integer> boardPositions){
         int nextLetterKeyToNumber = 0;
         int presentLetterKeyToNumber = 0;
 
@@ -132,6 +134,14 @@ public class ChessController {
             return;
         }
 
+        tryToMove(figureSymbol, present, next);
+
+        gameExit(figureSymbol, next);
+    }
+
+    private void tryToMove(char figureSymbol, Point present, Point next) {
+        char figureSymbolLowerCase = Character.toLowerCase(figureSymbol);
+        Figure figure = model.getFigures().get(figureSymbolLowerCase);
         boolean isMoveSuccessful = figure.move(present, next);
 
         if (isMoveSuccessful) {
@@ -149,7 +159,11 @@ public class ChessController {
         if(figureSymbolLowerCase == 'p') {
             model.getPawn().promotion(next, model.getFigures(), scanner);
         }
+    }
 
+    private void gameExit(char figureSymbol, Point next){
+        char figureSymbolLowerCase = Character.toLowerCase(figureSymbol);
+        Figure figure = model.getFigures().get(figureSymbolLowerCase);
         if (isThreefoldRepetition()) {
             System.out.println("Гра закінчена нічиєю через трьохразове повторення позиції!");
             System.exit(0);
