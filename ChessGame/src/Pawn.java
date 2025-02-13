@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class Pawn extends Figure {
 
-    int[] previousMove;
+    private final int[] previousMove;
 
     public Pawn(char[][] board, int[] previousMove) {
         super.board = board;
@@ -101,27 +101,40 @@ public class Pawn extends Figure {
         return !isPawnWhite && pawn.getY() - 1 == field.getY() && (pawn.getX() + 1 == field.getX() || pawn.getX() - 1 == field.getX());
     }
 
-    protected boolean imitateMove(Point present, Point next) {
+    protected boolean checkIsPossibleMovePawnWhite(Point present, Point next) {
         int yLength = Math.abs(next.getY() - present.getY());
         char pawn = board[present.getY()][present.getX()];
 
         boolean isWhitePawnStart = (pawn == 'P' && present.getY() == 1);
+        if(present.getX() == next.getX() && yLength == 1
+                && present.getY() < next.getY() && board[next.getY()][next.getX()] == '.'
+                || isWhitePawnStart && present.getX() == next.getX()
+                && yLength == 2 && present.getY() < next.getY() && board[next.getY()][next.getX()] == '.'){
+            return true;
+        }
+        return false;
+    }
+
+    protected boolean checkIsPossibleMovePawnBlack(Point present, Point next) {
+        int yLength = Math.abs(next.getY() - present.getY());
+        char pawn = board[present.getY()][present.getX()];
         boolean isBlackPawnStart = (pawn == 'p' && present.getY() == 6);
+        if(present.getX() == next.getX() && yLength == 1 &&
+                present.getY() > next.getY() && board[next.getY()][next.getX()] == '.'
+                || isBlackPawnStart && present.getX() == next.getX() && yLength == 2 &&
+                present.getY() > next.getY() && board[next.getY()][next.getX()] == '.'){
+            return true;
+        }
+        return false;
+    }
+
+    protected boolean imitateMove(Point present, Point next) {
+        char pawn = board[present.getY()][present.getX()];
 
         boolean isBlockedByOtherFigures = checkIsFigureBetweenFields(present, next);
 
-        boolean isPossibleMovePawnWhite = (present.getX() == next.getX() && yLength == 1 &&
-                present.getY() < next.getY() && board[next.getY()][next.getX()] == '.'
-                || isWhitePawnStart && present.getX() == next.getX() && yLength == 2 &&
-                present.getY() < next.getY() && board[next.getY()][next.getX()] == '.');
-
-        boolean isPossibleMovePawnBlack = (present.getX() == next.getX() && yLength == 1 &&
-                present.getY() > next.getY() && board[next.getY()][next.getX()] == '.'
-                || isBlackPawnStart && present.getX() == next.getX() && yLength == 2 &&
-                present.getY() > next.getY() && board[next.getY()][next.getX()] == '.');
-
-        boolean whitePawnMove = !isBlockedByOtherFigures && pawn == 'P' && isPossibleMovePawnWhite;
-        boolean blackPawnMove = !isBlockedByOtherFigures && pawn == 'p' && isPossibleMovePawnBlack;
+        boolean whitePawnMove = !isBlockedByOtherFigures && pawn == 'P' && checkIsPossibleMovePawnWhite(present, next);
+        boolean blackPawnMove = !isBlockedByOtherFigures && pawn == 'p' && checkIsPossibleMovePawnBlack(present, next);
 
         if (enPassantMove(present, next)) {
             return true;
